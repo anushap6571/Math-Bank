@@ -19,3 +19,7 @@ Our key purpose is to create an upgraded version of a basic calculator to help s
     - Should be able to allow users to create an account, log in/out
     
     - Should be able to graph functions
+
+Targeted Users:
+Potential users for the website include students and educators looking to solve math problems and store results for future use. Anyone who would need help with solving math problems can use our application as well. Mainly targets users with medium complexity problems (basic arithmetic, trig functions, matrices, or graphing functions). 
+
