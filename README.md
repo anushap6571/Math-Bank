@@ -31,19 +31,35 @@ Allow users to graph equations and functions
 Solve matrices
 Solve trigonometric functions
 Add a “Notes” section which is saved between logins for common equations / rough work
-Get Started
 
-create virtual environment
+# Get Started
+
+# create virtual environment
+
 mac
-` $ python3 -m venv <env-name>`
-`$ source <env-name>/bin/activate`
+
+```
+$ python3 -m venv <env-name>
+$ source <env-name>/bin/activate
+```
 
 windows
-`$ python -m venv <env-name>`
-`$ .\<env-name>\Scripts\activate`
 
-install flask
+```
+$ python -m venv <env-name>
+$ .\<env-name>\Scripts\activate
+```
+
+# install flask
+
 mac
-`$ pip3 install Flask`
+
+```
+$ pip3 install Flask
+```
+
 windows
-`$ pip install Flask`
+
+```
+$ pip install Flask
+```
