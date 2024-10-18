@@ -24,13 +24,14 @@ Targeted Users:
 Potential users for the website include students and educators looking to solve math problems and store results for future use. Anyone who would need help with solving math problems can use our application as well. Mainly targets users with medium complexity problems (basic arithmetic, trig functions, matrices, or graphing functions).
 
 Scope:
-Create a secure login
-Add basic calculator implementation
-Save each entry in a “History” section
-Allow users to graph equations and functions
-Solve matrices
-Solve trigonometric functions
-Add a “Notes” section which is saved between logins for common equations / rough work
+
+- Create a secure login
+- Add basic calculator implementation
+- Save each entry in a “History” section
+- Allow users to graph equations and functions
+- Solve matrices
+- Solve trigonometric functions
+- Add a “Notes” section which is saved between logins for common equations / rough work
 
 # Get Started
 
@@ -50,6 +51,13 @@ $ python -m venv <env-name>
 $ .\<env-name>\Scripts\activate
 ```
 
+note: add your virtual enviroment name to the .gitignore so you don't push it
+inside .gitignore
+
+```
+<envi-name>/
+```
+
 # install flask
 
 mac
@@ -62,4 +70,10 @@ windows
 
 ```
 $ pip install Flask
+```
+
+# to run
+
+```
+$ python3 <pathname to server.py>
 ```
