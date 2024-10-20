@@ -4,7 +4,7 @@ app = Flask(__name__)
 
 # define the page on the website
 @app.route('/home_page')
-def members():
+def home_page():
     return "hello world"
 
 
