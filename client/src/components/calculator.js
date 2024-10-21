@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+// display calculator screen
 const Calculator = () => {
     const [a, setA] = useState('');
     const [b, setB] = useState('');
@@ -7,6 +7,7 @@ const Calculator = () => {
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
 
+    
     const calculate = async () => {
         try {
             const response = await fetch('http://127.0.0.1:5000/calculator', {
@@ -31,6 +32,10 @@ const Calculator = () => {
         }
     };
 
+    const handleOperation = (op) => {
+        setOperation(op);
+    };
+
     return (
         <div>
             <h2>Calculator</h2>
@@ -46,13 +51,15 @@ const Calculator = () => {
                 onChange={(e) => setB(e.target.value)}
                 placeholder="Enter second number"
             />
-            <select onChange={(e) => setOperation(e.target.value)}>
-                <option value="">Select operation</option>
-                <option value="add">+</option>
-                <option value="subtract">-</option>
-                <option value="multiply">*</option>
-                <option value="divide">/</option>
-            </select>
+            
+            { <div>
+                <button onClick={() => handleOperation('add')}>+</button>
+                <button onClick={() => handleOperation('subtract')}>-</button>
+                <button onClick={() => handleOperation('multiply')}>*</button>
+                <button onClick={() => handleOperation('divide')}>/</button>
+            </div> }
+
+            
             <button onClick={calculate}>Calculate</button>
 
             {result !== null && <p>Result: {result}</p>}
