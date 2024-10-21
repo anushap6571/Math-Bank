@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react';
+import Calculator from './components/calculator';
 
 function App() {
-  return (
-    <div>App</div>
-  )
+    return (
+        <div>
+            <h1>Math Bank</h1>
+            <Calculator />
+        </div>
+    );
 }
 
-export default App
+export default App;

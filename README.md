@@ -72,6 +72,14 @@ windows
 $ pip install Flask
 ```
 
+# cross-origin resource sharing
+
+mac and windows
+
+```
+$ pip install flask-cors
+```
+
 # to run
 
 ```
