@@ -33,6 +33,16 @@ Scope:
 - Solve trigonometric functions
 - Add a “Notes” section which is saved between logins for common equations / rough work
 
+Potential Risks:
+
+- We don’t have experience designing a web-based application, and implementing trigonometric/matrix calculations through code.
+- We are unsure about implementing the graphing portion of the calculator.
+- We need to learn about adding a login/authentication and using a database to store the user’s history.
+- Securing user information in our database.
+- Saving past equations from the user for future reference.
+- Working to integrate front end and back end.
+
+
 # Get Started
 
 # create virtual environment
