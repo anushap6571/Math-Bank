@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-// display calculator screen
+
 const Calculator = () => {
-    const [a, setA] = useState('');
-    const [b, setB] = useState('');
-    const [operation, setOperation] = useState('');
+    const [expression, setExpression] = useState('');
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
 
-    
+    const handleButtonClick = (value) => {
+        setExpression((prev) => prev + value);
+    };
+
     const calculate = async () => {
         try {
             const response = await fetch('http://127.0.0.1:5000/calculator', {
@@ -15,7 +16,7 @@ const Calculator = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ operation, a: Number(a), b: Number(b) }),
+                body: JSON.stringify({ expression }),
             });
 
             const data = await response.json();
@@ -32,35 +33,49 @@ const Calculator = () => {
         }
     };
 
-    const handleOperation = (op) => {
-        setOperation(op);
+    const clearInput = () => {
+        setExpression('');
+        setResult(null);
+        setError('');
     };
 
     return (
         <div>
             <h2>Calculator</h2>
             <input
-                type="number"
-                value={a}
-                onChange={(e) => setA(e.target.value)}
-                placeholder="Enter first number"
+                type="text"
+                value={expression}
+                onChange={(e) => setExpression(e.target.value)}
+                placeholder="Enter math expression"
             />
-            <input
-                type="number"
-                value={b}
-                onChange={(e) => setB(e.target.value)}
-                placeholder="Enter second number"
-            />
-            
-            { <div>
-                <button onClick={() => handleOperation('add')}>+</button>
-                <button onClick={() => handleOperation('subtract')}>-</button>
-                <button onClick={() => handleOperation('multiply')}>*</button>
-                <button onClick={() => handleOperation('divide')}>/</button>
-            </div> }
 
-            
+            <div>
+                <button onClick={() => handleButtonClick('7')}>7</button>
+                <button onClick={() => handleButtonClick('8')}>8</button>
+                <button onClick={() => handleButtonClick('9')}>9</button>
+                <button onClick={() => handleButtonClick('/')}>/</button>
+            </div>
+            <div>
+                <button onClick={() => handleButtonClick('4')}>4</button>
+                <button onClick={() => handleButtonClick('5')}>5</button>
+                <button onClick={() => handleButtonClick('6')}>6</button>
+                <button onClick={() => handleButtonClick('*')}>*</button>
+            </div>
+            <div>
+                <button onClick={() => handleButtonClick('1')}>1</button>
+                <button onClick={() => handleButtonClick('2')}>2</button>
+                <button onClick={() => handleButtonClick('3')}>3</button>
+                <button onClick={() => handleButtonClick('-')}>-</button>
+            </div>
+            <div>
+                <button onClick={() => handleButtonClick('0')}>0</button>
+                <button onClick={() => handleButtonClick('(')}>(</button>
+                <button onClick={() => handleButtonClick(')')}>)</button>
+                <button onClick={() => handleButtonClick('+')}>+</button>
+            </div>
+
             <button onClick={calculate}>Calculate</button>
+            <button onClick={clearInput}>Clear</button>
 
             {result !== null && <p>Result: {result}</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}

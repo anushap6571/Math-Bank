@@ -7,31 +7,21 @@ from basic_math import BasicMath
 app = Flask(__name__)
 CORS(app)
 
-math_ops = BasicMath()
-
+basic_math = BasicMath()
 
 @app.route('/calculator', methods=['POST'])
 def calculate():
-    data = request.json
-    operation = data.get('operation')
-    a = data.get('a')
-    b = data.get('b')
+    data = request.get_json()
+    expression = data.get('expression')
 
     try:
-        if operation == 'add':
-            result = math_ops.add(a, b)
-        elif operation == 'subtract':
-            result = math_ops.subtract(a, b)
-        elif operation == 'multiply':
-            result = math_ops.multiply(a, b)
-        elif operation == 'divide':
-            result = math_ops.divide(a, b)
-        else:
-            return jsonify({'error': 'Invalid operation'}), 400
-
+        # Using eval for demonstration; be cautious with eval() in production
+        result = basic_math.process(expression)
         return jsonify({'result': result})
-    except ValueError as e:
-        return jsonify({'error': str(e)}), 400
+    except ZeroDivisionError:
+        return jsonify({'error': 'Cannot divide by zero.'}), 400
+    except Exception as e:
+        return jsonify({'error': 'Invalid expression.'}), 400
 
 
 

@@ -1,15 +1,6 @@
 # basic math class 
 class BasicMath:
-    def add(self, a, b):
-        return a + b
-    
-    def subtract(self, a, b):
-        return a - b
+    def process(self, expression):
+      # do input validation for the expression here
 
-    def multiply(self, a, b):
-        return a * b
-
-    def divide(self, a, b):
-        if b == 0:
-            raise ValueError("Cannot divide by zero.")
-        return a / b
+      return eval(expression)
