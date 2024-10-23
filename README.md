@@ -4,7 +4,7 @@ Project Description:
 
 A web application to help solve math problems, including a basic calculator, trigonometric functions and graphing, matrices, a rough work section, and a login with complete user history to reference previous answers.
 
-Objectives/Purpose:
+Objectives / Purpose:
 
 Our key purpose is to create an upgraded version of a basic calculator to help students working on the web answer math problems in an easier way. Here are some specific objectives we plan to tackle:
 
