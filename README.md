@@ -80,6 +80,12 @@ mac and windows
 $ pip install flask-cors
 ```
 
+# install router-dom
+
+```
+$ npm install react-router-dom
+```
+
 # to run
 
 ```

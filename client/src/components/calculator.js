@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 const Calculator = () => {
     const [expression, setExpression] = useState('');
+    const [textbox, setTextbox] = useState('');
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
 
@@ -49,7 +50,7 @@ const Calculator = () => {
                 type="text"
                 value={expression}
                 onChange={(e) => setExpression(e.target.value)}
-                placeholder="Enter math expression"
+                placeholder="Enter expression"
                 style={{...inputBox, resize: 'none'}}
             >
                 
