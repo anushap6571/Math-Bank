@@ -6,7 +6,7 @@ A web application to help solve math problems, including a basic calculator, tri
 
 Objectives / Purpose:
 
-Our key purpose is to create an upgraded version of a basic calculator to help students working on the web answer math problems in an easier way. Here are some specific objectives we plan to tackle:
+Our key purpose is to create an upgraded version of a basic calculator to help students working on the web answer math problems in an easier way. Unlike other calculators our one saves a history of notes and calculations to aid in solving similar problems. Here are some specific objectives we plan to tackle:
 
     - To be able to create a web application for solving math problems
 
