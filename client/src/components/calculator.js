@@ -25,11 +25,12 @@ const Calculator = () => {
             const data = await response.json();
             if (response.ok) {
                 setResult(data.result);
-                setExpression((prev) => prev + ' =\n                 ' + data.result + '\n');
+                setExpression((prev) => prev + ' =\n            '  + data.result + '\n');
                 setError('');
             } else {
                 setError(data.error);
                 setResult(null);
+
             }
         } catch (err) {
             setError('Error communicating with server.');
