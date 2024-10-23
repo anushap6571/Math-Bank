@@ -4,3 +4,4 @@ class BasicMath:
       # do input validation for the expression here
 
       return eval(expression)
+    

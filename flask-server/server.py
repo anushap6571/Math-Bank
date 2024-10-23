@@ -9,13 +9,14 @@ CORS(app)
 
 basic_math = BasicMath()
 
+# all logic for calculator page
 @app.route('/calculator', methods=['POST'])
 def calculate():
     data = request.get_json()
     expression = data.get('expression')
 
     try:
-        # Using eval for demonstration; be cautious with eval() in production
+        # using eval for demonstration; be cautious with eval() in production
         result = basic_math.process(expression)
         return jsonify({'result': result})
     except ZeroDivisionError:
