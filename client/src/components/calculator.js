@@ -6,10 +6,28 @@ const Calculator = () => {
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
 
+
+    // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
-        setExpression((prev) => prev + ' ' + value);
+        setTextbox((prev) => prev + value);
+        setExpression((prev) => prev + value);
     };
 
+    // function to handle if the user uses keyboard typing
+    const handleInputChange = (e) => {
+        
+        setExpression(e.target.value);
+        setTextbox(e.target.value);
+        if(e.target.value.endsWith('=')){
+            calculate();
+        }
+    };
+
+    // function to handle delete button 
+    const handleDelete = () =>{
+        setExpression((prev) => prev.slice(0, -1));
+        setTextbox((prev) => prev.slice(0, -1));
+    };
     
 
     const calculate = async () => {
@@ -24,8 +42,10 @@ const Calculator = () => {
 
             const data = await response.json();
             if (response.ok) {
-                setResult(data.result);
-                setExpression((prev) => prev + ' =\n            '  + data.result + '\n');
+                const newResult = data.result;
+                setResult(newResult);
+                setTextbox((prev) => (prev.endsWith('=') ? prev : prev + '= ') + newResult + '\n'); 
+                setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
                 setError(data.error);
@@ -41,6 +61,7 @@ const Calculator = () => {
     const clearInput = () => {
         setExpression('');
         setResult(null);
+        setTextbox('');  
         setError('');
     };
 
@@ -49,8 +70,8 @@ const Calculator = () => {
         <div style={calcContainer}>
             <textarea
                 type="text"
-                value={expression}
-                onChange={(e) => setExpression(e.target.value)}
+                value={textbox}
+                onChange= { handleInputChange }
                 placeholder="Enter expression"
                 style={{...inputBox, resize: 'none'}}
             >
@@ -75,7 +96,7 @@ const Calculator = () => {
                 <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('1')}>1</button>
                 <button style={buttonStyle} onClick={() => handleButtonClick('2')}>2</button>
                 <button style={buttonStyle} onClick={() => handleButtonClick('3')}>3</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('Del')}>DEL</button>
+                <button style={buttonStyle} onClick={() => handleDelete('Del')}>DEL</button>
                 <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('-')}>-</button>
             </div>
             <div>
@@ -88,7 +109,7 @@ const Calculator = () => {
             </div>
 
             <button style={mostLeftButtonStyle} onClick={calculate}>Solve</button>
-            <button style={buttonStyle} onClick={clearInput}>Clear</button>
+    
 
             {result !== null && <p>Result: {result}</p>}
             {error && <p style={{ color: 'red' }}>{error}</p>}
