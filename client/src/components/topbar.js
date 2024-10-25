@@ -27,21 +27,6 @@ const TopBar = () => {
         </div>
     )
 }
-        /*<div style = {top}>
-            <div>
-                <img src={require('../assets/mathbank-logo.png')} style={logo}/>
-                <div style={mathbank}>
-                    Math Bank
-                </div>
-            </div>
-
-            <div>
-                { <link>
-                    <button>Account</button>
-                </link> }
-            </div>
-        </div>
-*/
 
 export default TopBar;
 
