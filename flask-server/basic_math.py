@@ -40,8 +40,8 @@ class BasicMath:
         if re.search(r'[+\-*/]{2,}', expression):
             return False
         
-        # 2. Ensure expression doesn't start or end with an operator
-        if re.match(r'^[+\-*/]', expression) or re.match(r'[+\-*/]$', expression):
+        # 2. Ensure expression doesn't end with an operator that is invalid (can start with + or -)
+        if re.match(r'^[\*/]', expression) or re.match(r'[+\-*/]$', expression):
             return False
         
         return True

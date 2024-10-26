@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 
+
 const Calculator = () => {
     const [expression, setExpression] = useState('');
     const [textbox, setTextbox] = useState('');
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
+    const [isHovering, setHoveredButton] = useState(null);
 
 
     // funtion for button clicks to output to screen and save to expression
@@ -28,6 +30,58 @@ const Calculator = () => {
         setExpression((prev) => prev.slice(0, -1));
         setTextbox((prev) => prev.slice(0, -1));
     };
+
+    const Button = ({ label, style }) => (
+        <button
+            style={style(label)}
+            onMouseEnter={() => setHoveredButton(label)}
+            onMouseLeave={() => setHoveredButton(null)}
+            onClick={
+                label === 'CE' ? clearInput :
+                label === 'DEL' ? handleDelete :
+                label === '=' ? calculate :
+                () => handleButtonClick(label)
+            }
+        >
+            {label}
+        </button>
+    );
+    
+    const buttonStyle = (label) => ({
+        marginLeft: '2%',
+        marginTop: '2%',
+        backgroundColor: '#E5E7EB',
+        height: '8vh',
+        width: '4.51vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : (['+', '-', '*', '/', '='].includes(label) ? '#0084D1' : '#E5E7EB'),
+        
+    });
+
+    const mostLeftButtonStyle = (label) => ({
+        marginTop: '2%',
+        backgroundColor: '#E5E7EB',
+        height: '8vh',
+        width: '4vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
+    });
+
+    const bottomButtonStyle = (label) => ({
+        marginTop: '2%',
+        marginLeft: label != 'Matrix' ? '2%': '0%',
+        backgroundColor: '#E5E7EB',
+        height: '5vh',
+        width: '7.65vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
+    })
     
 
     const calculate = async () => {
@@ -44,7 +98,7 @@ const Calculator = () => {
             if (response.ok) {
                 const newResult = data.result;
                 setResult(newResult);
-                setTextbox((prev) => (prev.endsWith('=') ? prev : prev + '= ') + newResult + '\n'); 
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + newResult + '\n'); 
                 setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
@@ -75,40 +129,61 @@ const Calculator = () => {
                 placeholder="Enter expression"
                 style={{...inputBox, resize: 'none'}}
             >
-                
             </textarea>
             <div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('7')}>7</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('8')}>8</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('9')}>9</button>
-                <button style={buttonStyle} onClick={(clearInput)}>CE</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('/')}>/</button>
-            </div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('4')}>4</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('5')}>5</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('6')}>6</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('2nd')}>2nd</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('*')}>*</button>
-            </div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('1')}>1</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('2')}>2</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('3')}>3</button>
-                <button style={buttonStyle} onClick={() => handleDelete('Del')}>DEL</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('-')}>-</button>
-            </div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('0')}>0</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('(')}>(</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick(')')}>)</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('Rad')}>Rad</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('+')}>+</button>
-            </div>
+                <div>
+                    <Button label='7' style={mostLeftButtonStyle}/>
+                    <Button label='8' style={buttonStyle}/>
+                    <Button label='9' style={buttonStyle}/>
+                    <Button label='CE' style={buttonStyle} onClick={(clearInput)}/>
+                    <Button label='/' style={buttonStyle}/>
+                </div>
+                <div>
+                    <Button label='4' style={mostLeftButtonStyle}/>
+                    <Button label='5' style={buttonStyle}/>
+                    <Button label='6' style={buttonStyle}/>
+                    <Button label='2nd' style={buttonStyle}/>
+                    <Button label='*' style={buttonStyle}/>
+                </div>
+                <div>
+                    <Button label='1' style={mostLeftButtonStyle}/>
+                    <Button label='2' style={buttonStyle}/>
+                    <Button label='3' style={buttonStyle}/>
+                    <Button label='Del' style={buttonStyle}/>
+                    <Button label='-' style={buttonStyle}/>
+                </div>
+                <div>
+                    <Button label='0' style={mostLeftButtonStyle}/>
+                    <Button label='(' style={buttonStyle}/>
+                    <Button label=')' style={buttonStyle}/>
+                    <Button label='Rad' style={buttonStyle}/>
+                    <Button label='+' style={buttonStyle}/>
+                </div>
+                <div>
+                    <Button label='sin' style={mostLeftButtonStyle}/>
+                    <Button label='cos' style={buttonStyle}/>
+                    <Button label='tan' style={buttonStyle}/>
+                    <Button label='sqrt' style={buttonStyle}/>
+                    <Button label='!' style={buttonStyle}/>
+                </div>
+                <div>
+                    <Button label='log' style={mostLeftButtonStyle}/>
+                    <Button label='exp' style={buttonStyle}/>
+                    <Button label='ln' style={buttonStyle}/>
+                    <Button label='|x|' style={buttonStyle}/>
+                    <Button label='=' style={buttonStyle}/>
+                    
+                </div>
+                <div>
+                    <Button label='Matrix' style={bottomButtonStyle}/>
+                    <Button label='Equation' style={bottomButtonStyle}/>
+                    <Button label='Graph' style={bottomButtonStyle}/>
+                    
+                </div>
+                
             </div>
 
-            <button style={mostLeftButtonStyle} onClick={calculate}>Solve</button>
+            
     
 
             {result !== null && <p>Result: {result}</p>}
@@ -120,49 +195,35 @@ const Calculator = () => {
 
 const spaceBetween = 10;
 
+
+
 export default Calculator;
 
 const calcContainer = {
     position: 'absolute',
     left: '50%',
-    top: '50%',
+    top: '57%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     borderColor: 'white',
     height: 'auto',
-    width: 'auto',
+    width: '24%',
     alignContent: 'center',
+    alignItems: 'center',
     flex: 1,
-    padding: 40,
+    padding: '3vh',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
 
 };
 
 const inputBox = {
-    height: 100,
-    width: 435,
-    fontSize: 20,
+    height: '12vh',
+    width: '100%',
+    fontSize: '2.5vh',
 }
 
-const mostLeftButtonStyle = {
-    marginTop: 15,
-    backgroundColor: '#E5E7EB',
-    height: 80,
-    width: 80,
-    border: 0,
-    borderRadius: 10,
-    fontSize: 20,
-}
 
-const buttonStyle = {
-    marginLeft: spaceBetween,
-    marginTop: 15,
-    backgroundColor: '#E5E7EB',
-    height: 80,
-    width: 80,
-    border: 0,
-    borderRadius: 10,
-    fontSize: 20,
-};
+
+
 
 
