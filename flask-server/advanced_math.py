@@ -38,7 +38,7 @@ class AdvancedMath:
         # Replace exponentiation symbol '^' with '**'
         expression = expression.replace('^', '**')
 
-        # Replace factorial symbol '!' with math.factorial
+        # Replace factorial symbol '!' with 'math.factorial'
         expression = re.sub(r'(\d+)!', r'math.factorial(\1)', expression)
         
         return expression
