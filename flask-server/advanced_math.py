@@ -23,11 +23,22 @@ class AdvancedMath:
             'abs': 'math.fabs',
             'log': 'math.log10',  # Log base 10
             'ln': 'math.log',      # Natural log
-            'sqrt': 'math.sqrt'
+            'sqrt': 'math.sqrt',
+            # (Trisha) - adding more functions
+            'pow': 'math.pow',
+            'sind': 'math.radians(math.sin)',
+            'cosd': 'math.radians(math.cos)',
+            'tand': 'math.radians(math.tan)'
         }
         
         # Replace each function name in the expression with `math` function
         for func, math_func in function_map.items():
             expression = re.sub(rf'\b{func}\b', math_func, expression)
+
+        # Replace exponentiation symbol '^' with '**'
+        expression = expression.replace('^', '**')
+
+        # Replace factorial symbol '!' with math.factorial
+        expression = re.sub(r'(\d+)!', r'math.factorial(\1)', expression)
         
         return expression
