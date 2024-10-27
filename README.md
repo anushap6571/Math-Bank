@@ -86,6 +86,18 @@ $ pip install flask-cors
 $ npm install react-router-dom
 ```
 
+# install react-bootstrap
+
+```
+$ npm install react-bootstrap bootstrap
+```
+
+# install react-hook-form
+
+```
+$ npm install react-hook-form
+```
+
 # to run
 
 ```
