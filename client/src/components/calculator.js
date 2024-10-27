@@ -17,7 +17,6 @@ const Calculator = () => {
 
     // function to handle if the user uses keyboard typing
     const handleInputChange = (e) => {
-        
         setExpression(e.target.value);
         setTextbox(e.target.value);
         if(e.target.value.endsWith('=')){
@@ -61,14 +60,8 @@ const Calculator = () => {
     });
 
     const mostLeftButtonStyle = (label) => ({
-        marginTop: '2%',
-        backgroundColor: '#E5E7EB',
-        height: '8vh',
-        width: '4vw',
-        border: 0,
-        borderRadius: '0.5rem',
-        fontSize: '2vh',
-        backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
+        ...buttonStyle(label),
+        marginLeft: '0',
     });
 
     const bottomButtonStyle = (label) => ({
@@ -131,42 +124,42 @@ const Calculator = () => {
             >
             </textarea>
             <div>
-                <div>
+                <div style = { buttonRowStyle }>
                     <Button label='7' style={mostLeftButtonStyle}/>
                     <Button label='8' style={buttonStyle}/>
                     <Button label='9' style={buttonStyle}/>
                     <Button label='CE' style={buttonStyle} onClick={(clearInput)}/>
                     <Button label='/' style={buttonStyle}/>
                 </div>
-                <div>
+                <div style = { buttonRowStyle }>
                     <Button label='4' style={mostLeftButtonStyle}/>
                     <Button label='5' style={buttonStyle}/>
                     <Button label='6' style={buttonStyle}/>
                     <Button label='2nd' style={buttonStyle}/>
                     <Button label='*' style={buttonStyle}/>
                 </div>
-                <div>
+                <div style = { buttonRowStyle }>
                     <Button label='1' style={mostLeftButtonStyle}/>
                     <Button label='2' style={buttonStyle}/>
                     <Button label='3' style={buttonStyle}/>
                     <Button label='Del' style={buttonStyle}/>
                     <Button label='-' style={buttonStyle}/>
                 </div>
-                <div>
+                <div style = { buttonRowStyle }>
                     <Button label='0' style={mostLeftButtonStyle}/>
                     <Button label='(' style={buttonStyle}/>
                     <Button label=')' style={buttonStyle}/>
                     <Button label='Rad' style={buttonStyle}/>
                     <Button label='+' style={buttonStyle}/>
                 </div>
-                <div>
+                <div style = { buttonRowStyle }>
                     <Button label='sin' style={mostLeftButtonStyle}/>
                     <Button label='cos' style={buttonStyle}/>
                     <Button label='tan' style={buttonStyle}/>
                     <Button label='sqrt' style={buttonStyle}/>
                     <Button label='!' style={buttonStyle}/>
                 </div>
-                <div>
+                <div style = { buttonRowStyle }>
                     <Button label='log' style={mostLeftButtonStyle}/>
                     <Button label='exp' style={buttonStyle}/>
                     <Button label='ln' style={buttonStyle}/>
@@ -174,7 +167,7 @@ const Calculator = () => {
                     <Button label='=' style={buttonStyle}/>
                     
                 </div>
-                <div>
+                <div style = { buttonRowStyle }>
                     <Button label='Matrix' style={bottomButtonStyle}/>
                     <Button label='Equation' style={bottomButtonStyle}/>
                     <Button label='Graph' style={bottomButtonStyle}/>
@@ -193,31 +186,40 @@ const Calculator = () => {
     );
 };
 
-const spaceBetween = 10;
 
 
 
 export default Calculator;
 
 const calcContainer = {
+    //display: "flex",
+    flexDirection: 'column',
     position: 'absolute',
     left: '50%',
     top: '57%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     borderColor: 'white',
-    height: 'auto',
-    width: '24%',
+    height: '75vh',
+    width: '24vw',
     alignContent: 'center',
     alignItems: 'center',
-    flex: 1,
     padding: '3vh',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+    
 
 };
 
+const buttonRowStyle = {
+    display: 'flex',
+    //justifyContent: 'space-between', // Spreads buttons evenly within the row
+    width: '100%', // Ensures the row takes up the full width of the container
+    flexWrap: 'nowrap', // Allows buttons to wrap to the next line if needed
+    marginBottom: '1vh',
+};
+
 const inputBox = {
-    height: '12vh',
+    height: '10vh',
     width: '100%',
     fontSize: '2.5vh',
 }
