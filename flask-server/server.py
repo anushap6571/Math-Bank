@@ -20,9 +20,10 @@ def calculate():
     try:
         # using eval for demonstration; be cautious with eval() in production
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
-        #if any(func in expression for func in ['sin', 'cos', 'tan', 'abs', 'log', 'ln', 'sqrt']):
-            #result = advanced_math.process(expression)
-        result = basic_math.process(expression)
+        if any(func in expression for func in ['sin', 'cos', 'tan', 'abs', 'log', 'ln', 'sqrt']):
+            result = advanced_math.process(expression)
+        else:
+            result = basic_math.process(expression)
         return jsonify({'result': result})
     except ZeroDivisionError:
         return jsonify({'error': 'Cannot divide by zero.'}), 400

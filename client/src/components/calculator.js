@@ -142,7 +142,7 @@ const Calculator = () => {
                     <Button label='1' style={mostLeftButtonStyle}/>
                     <Button label='2' style={buttonStyle}/>
                     <Button label='3' style={buttonStyle}/>
-                    <Button label='Del' style={buttonStyle}/>
+                    <Button label='DEL' style={buttonStyle}/>
                     <Button label='-' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
