@@ -1,3 +1,5 @@
+// Diego Jimenez, DAJ220000, Sign Up File
+
 import React,{useState} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
@@ -6,11 +8,32 @@ import {useForm} from 'react-hook-form'
 
 const SignUpPage=()=>{
 
-    const {register, watch, reset, handleSubmit, formState:{errors}} = useForm();
+    const {register, reset, handleSubmit, formState:{errors}} = useForm();
 
 
     const submitSignUp=(data)=>{
             console.log(data)
+
+            const body={
+                username:data.username,
+                email:data.email,
+                password:data.password
+            }
+            
+            const requestOptions={
+            
+                method: "POST",
+                headers:{
+                    'content-type':'application/json'
+                },
+                body:JSON.stringify(body)
+            }
+
+            fetch('/sign-up', requestOptions)
+            .then(res=>res.json())
+            .then(data=>console.log(data))
+            .catch(err=>console.log(err))
+
             reset()
         }
 
@@ -27,7 +50,7 @@ const SignUpPage=()=>{
                 </Form.Group>
                 {errors.username && <span style ={{color:"red"}}>Username is required</span>}       {/* give error to user if username is not valid*/}
                 <br></br>
-                {errors.username?.type == "maxLength" && <span style ={{color:"red"}}>Max username length is 25 characters</span>} {/* give reason for error if greater than 25 char*/}
+                {errors.username?.type === "maxLength" && <span style ={{color:"red"}}>Max username length is 25 characters</span>} {/* give reason for error if greater than 25 char*/}
 
                 <Form.Group>
                     <Form.Label>Email: </Form.Label>
@@ -38,7 +61,7 @@ const SignUpPage=()=>{
                 </Form.Group>
                 {errors.email && <span style ={{color:"red"}}>Email is required</span>}
                 <br></br>
-                {errors.email?.type == "maxLength" && <span style ={{color:"red"}}>Max email length is 30 characters</span>}
+                {errors.email?.type === "maxLength" && <span style ={{color:"red"}}>Max email length is 30 characters</span>}
                 <Form.Group>
                     <Form.Label>Password: </Form.Label>                 {/* same format as above */}
                     <Form.Control type ="password"                      /* <--- type is changed (password) to make the password*/
@@ -48,7 +71,7 @@ const SignUpPage=()=>{
                 </Form.Group>
                 {errors.password && <span style ={{color:"red"}}>Password is required</span>}
                 <br></br>
-                {errors.password?.type == "minLength" && <span style ={{color:"red"}}>Min password length is 8 characters</span>}
+                {errors.password?.type === "minLength" && <span style ={{color:"red"}}>Min password length is 8 characters</span>}
                 <Form.Group>
                     <Button id="sub" onClick={handleSubmit(submitSignUp)}>Sign Up</Button>            {/* sign up button once information is typed (incomplete)*/}
                 </Form.Group>
