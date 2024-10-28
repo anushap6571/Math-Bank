@@ -1,6 +1,6 @@
 // Corina Salazar
 import React, { useEffect, useState } from 'react';
-import './app.css'; // Ensure to import your CSS file for styling
+import './app.css';
 
 const Notes = () => {
     const [note, setNote] = useState('');
@@ -31,7 +31,7 @@ const Notes = () => {
 
     return (
         <div className="notes-container">
-            <h2>Math Notes</h2>
+            <h2 className="notes-title">Notes</h2>
             <div className="note-input">
                 <input
                     type="text"
@@ -40,13 +40,13 @@ const Notes = () => {
                     placeholder="Add a math note"
                     className="note-input-field"
                 />
-                <button onClick={handleAddNote} className="add-note-button">Add Note</button>
+                <button onClick={handleAddNote} className="add-note-button">Add</button>
             </div>
             <ul className="notes-list">
                 {notesList.map((n, index) => (
                     <li key={index} className="note-item">
                         {n}
-                        <button onClick={() => handleDeleteNote(index)} className="delete-note-button">Delete</button>
+                        <button onClick={() => handleDeleteNote(index)} className="delete-note-button">X</button>
                     </li>
                 ))}
             </ul>
@@ -55,3 +55,4 @@ const Notes = () => {
 };
 
 export default Notes;
+
