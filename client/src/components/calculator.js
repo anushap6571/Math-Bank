@@ -64,6 +64,19 @@ const Calculator = () => {
         marginLeft: '0',
     });
 
+    const specialButtonStyle = (label) => ({ 
+        marginLeft: label === '^' ? '0%' : '2%',
+        marginTop: '2%',
+        backgroundColor: '#E5E7EB',
+        height: '4vh',
+        width: '5.9vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
+            
+    })
+
     const bottomButtonStyle = (label) => ({
         marginTop: '2%',
         marginLeft: label != 'Matrix' ? '2%': '0%',
@@ -153,6 +166,12 @@ const Calculator = () => {
                     <Button label='+' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
+                    <Button label='^' style={specialButtonStyle}/>
+                    <Button label='.' style={specialButtonStyle}/>
+                    <Button label='π' style={specialButtonStyle}/>
+                    <Button label='e' style={specialButtonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
                     <Button label='sin' style={mostLeftButtonStyle}/>
                     <Button label='cos' style={buttonStyle}/>
                     <Button label='tan' style={buttonStyle}/>
@@ -195,12 +214,12 @@ const calcContainer = {
     //display: "flex",
     flexDirection: 'column',
     position: 'absolute',
-    left: '50%',
+    left: '40%',
     top: '57%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     borderColor: 'white',
-    height: '75vh',
+    height: '82vh',
     width: '24vw',
     alignContent: 'center',
     alignItems: 'center',
@@ -217,6 +236,8 @@ const buttonRowStyle = {
     flexWrap: 'nowrap', // Allows buttons to wrap to the next line if needed
     marginBottom: '1vh',
 };
+
+
 
 const inputBox = {
     height: '10vh',
