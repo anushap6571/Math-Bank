@@ -1,3 +1,5 @@
+// Anusha Patel - use case display calculator interface
+
 import React, { useState } from 'react';
 
 
@@ -19,7 +21,7 @@ const Calculator = () => {
     const handleInputChange = (e) => {
         setExpression(e.target.value);
         setTextbox(e.target.value);
-        if(e.target.value.endsWith('=')){
+        if(e.target.value.endsWith('=') && !['x'].includes(expression)){
             calculate();
         }
     };
@@ -30,6 +32,10 @@ const Calculator = () => {
         setTextbox((prev) => prev.slice(0, -1));
     };
 
+    const equationSolver = async () =>{
+
+    };
+
     const Button = ({ label, style }) => (
         <button
             style={style(label)}
@@ -38,7 +44,8 @@ const Calculator = () => {
             onClick={
                 label === 'CE' ? clearInput :
                 label === 'DEL' ? handleDelete :
-                label === '=' ? calculate :
+                (label == '=' && !['x'].includes(expression)) ? calculate :
+                label === 'Equation' ? calculate :
                 () => handleButtonClick(label)
             }
         >
@@ -79,8 +86,7 @@ const Calculator = () => {
 
     const bottomButtonStyle = (label) => ({
         marginTop: '2%',
-        marginLeft: label != 'Matrix' ? '2%': '0%',
-        backgroundColor: '#E5E7EB',
+        marginLeft: label !== 'Matrix' ? '2%': '0%',
         height: '5vh',
         width: '7.65vw',
         border: 0,
@@ -109,6 +115,7 @@ const Calculator = () => {
                 setError('');
             } else {
                 setError(data.error);
+                setTextbox((prev) => (prev + '\n' + data.error + '\n'));
                 setResult(null);
 
             }
@@ -148,7 +155,7 @@ const Calculator = () => {
                     <Button label='4' style={mostLeftButtonStyle}/>
                     <Button label='5' style={buttonStyle}/>
                     <Button label='6' style={buttonStyle}/>
-                    <Button label='2nd' style={buttonStyle}/>
+                    <Button label='x' style={buttonStyle}/>
                     <Button label='*' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
@@ -194,12 +201,6 @@ const Calculator = () => {
                 </div>
                 
             </div>
-
-            
-    
-
-            {result !== null && <p>Result: {result}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
         </div>
     );

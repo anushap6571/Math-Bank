@@ -42,7 +42,6 @@ Potential Risks:
 - Saving past equations from the user for future reference.
 - Working to integrate front end and back end.
 
-
 # Get Started
 
 # create virtual environment
@@ -88,6 +87,12 @@ mac and windows
 
 ```
 $ pip install flask-cors
+```
+
+# for equation solving
+
+```
+$ pip install sympy
 ```
 
 # install router-dom
