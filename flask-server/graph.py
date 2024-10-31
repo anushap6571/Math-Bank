@@ -34,7 +34,6 @@ class Graph:
         try:
             if not os.path.exists(assets_dir):
                 os.makedirs(assets_dir)  # Create the directory if it doesn't exist
-            os.chmod(graph_path, 0o777)  # Set permissions to allow read/write for the user
             
             # Save the figure as HTML
             fig.write_html(graph_path)
