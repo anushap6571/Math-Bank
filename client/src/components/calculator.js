@@ -109,9 +109,9 @@ const Calculator = () => {
 
             const data = await response.json();
             if (response.ok) {
-                const newResult = data.result;
-                setResult(newResult);
-                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + newResult + '\n'); 
+                const result = data.result;
+                setResult(result);
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
                 setExpression('');  // clear math expression after calculation
                 setError('');
             } else {

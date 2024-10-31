@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 
 
 const Graph = ({equation}) => {
-    const [graphUrl, setGraphUrl] = useState(null);
+    const [graphUrl, setGraphUrl] = useState('');
     const [error, setError] = useState('');
 
 
@@ -21,10 +21,8 @@ const Graph = ({equation}) => {
 
             const data = await response.json();
             if (response.ok) {
-                
-                
-                
-                setGraphUrl(data.graph);
+                setGraphUrl(`http://127.0.0.1:5000/${data.graph}`);
+                console.log(graphUrl);
                 setError('');
             } else {
                 setError(data.error);
@@ -37,17 +35,16 @@ const Graph = ({equation}) => {
     };
 
         return (
-            <div>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '20px' }}>
                 <button onClick={graphEquation} style={{ padding: '10px 20px', margin: '5px' }}>Graph</button>
                 {graphUrl && (
                     <div style={{ marginTop: '20px', width: '80%', display: 'flex', justifyContent: 'center' }}>
                         <h3>Graph:</h3>
+                        {/* Use iframe to load the graph */}
                         <iframe
                             src={graphUrl}
-                            
-                            width="60%"
-                            height="70%"
-                            style={{ overflow: 'hidden' }}
+                            style={{ width: '50vw', height: '70vh', border: 'none' }}
+                            title="Graph of the Equation"
                         ></iframe>
                     </div>
                 )}

@@ -29,12 +29,12 @@ class Graph:
         )
 
         # Ensure the 'assets' directory exists
-        assets_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets')
+        assets_dir = 'assets'
         graph_path = os.path.join(assets_dir, 'graph.html')
         try:
             if not os.path.exists(assets_dir):
                 os.makedirs(assets_dir)  # Create the directory if it doesn't exist
-            os.chmod(assets_dir, 0o777)  # Set permissions to allow read/write for the user
+            os.chmod(graph_path, 0o777)  # Set permissions to allow read/write for the user
             
             # Save the figure as HTML
             fig.write_html(graph_path)
