@@ -1,6 +1,7 @@
 // Anusha Patel - use case display calculator interface
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const Calculator = () => {
@@ -9,7 +10,7 @@ const Calculator = () => {
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
     const [isHovering, setHoveredButton] = useState(null);
-
+    const navigate = useNavigate();
 
     // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
@@ -32,8 +33,8 @@ const Calculator = () => {
         setTextbox((prev) => prev.slice(0, -1));
     };
 
-    const equationSolver = async () =>{
-
+    const handleEquationNavigation = () => {
+        navigate('/calculator/equation');
     };
 
     const Button = ({ label, style }) => (
@@ -45,7 +46,7 @@ const Calculator = () => {
                 label === 'CE' ? clearInput :
                 label === 'DEL' ? handleDelete :
                 (label == '=' && !['x'].includes(expression)) ? calculate :
-                label === 'Equation' ? calculate :
+                label === 'Equation' ? handleEquationNavigation : 
                 () => handleButtonClick(label)
             }
         >

@@ -95,6 +95,20 @@ $ pip install flask-cors
 $ pip install sympy
 ```
 
+# for graphing feature
+
+```
+$ npm install react-plotly.js plotly.js
+```
+
+```
+$ pip install matplotlib numpy
+```
+
+```
+$ pip install plotly
+```
+
 # install router-dom
 
 ```
