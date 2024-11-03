@@ -19,30 +19,38 @@ const SignUpPage=()=>{
                 email:data.email,
                 password:data.password
             }
-            
-            const requestOptions={
-            
-                method: "POST",
-                headers:{
-                    'content-type':'application/json'
+           
+            fetch('http://127.0.0.1:5000/sign-up', {  // Local server
+                method:'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
                 },
-                body:JSON.stringify(body)
-            }
-
-            fetch('/sign-up', requestOptions)
-            .then(res=>res.json())
-            .then(data=>console.log(data))
-            .catch(err=>console.log(err))
-
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if(!response.ok){
+                    throw new Error('Network response bad.')
+                }
+                return response.json();
+            })
+            .then(data=>{
+                console.log('Success', data);
+                alert('User created');
+            })
+            .catch((error) =>{
+                console.log('Error from catch \n', error);
+                //alert(`Error (HERE): ${JSON.stringify(error)}`);
+            })
+           
             reset()
         }
 
     return(
         <div className = "home">  
-            <h1>Sign Up Page</h1> 
+            <h1>Sign Up Page</h1>
             <form>
                 <Form.Group>
-                    <Form.Label>Username: </Form.Label> 
+                    <Form.Label>Username: </Form.Label>
                     <Form.Control type ="text"                                          /* what type the user can enter */
                     placeholder="Enter your Username"                                   /* text inside of the prompt box*/
                     {...register("username", {required:true, maxLength:25})}            /* saves the input to username, and sets a length limit*/
