@@ -24,13 +24,15 @@ function App() {
                     <Routes>
                         <Route path ="/Calc" element = {<Calculator/>}/>
                     </Routes>
-                    <Route path="/calculator/equation" element={
+                    <Routes>
+                        <Route path="/calculator/equation" element=
+                        {
                             <>
                                 <EquationSolver equation={equation} setEquation={setEquation} />
                                 <Graph equation={equation} setEquation={setEquation}/>
                             </>
-                        } 
-                    />
+                        }/>
+                    </Routes>
             </div>
         </Router>
 

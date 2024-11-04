@@ -4,8 +4,9 @@ from basic_math import BasicMath
 from advanced_math import AdvancedMath
 from equation_solver import EquationSolver
 from graph import Graph
-import os
 from flask_sqlalchemy import SQLAlchemy
+import os
+
 # math bank controller
 
 app = Flask(__name__)
