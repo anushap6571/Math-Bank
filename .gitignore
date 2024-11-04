@@ -1,1 +1,3 @@
-.venv/
+envi/
+node_modules/
+__pycache__/
