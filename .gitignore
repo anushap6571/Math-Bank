@@ -1,1 +1,4 @@
 testenv/
+node_modules/
+__pycache__/
+assets/

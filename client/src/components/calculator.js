@@ -1,15 +1,100 @@
+// Anusha Patel - use case display calculator interface
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 const Calculator = () => {
     const [expression, setExpression] = useState('');
     const [textbox, setTextbox] = useState('');
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
+    const [isHovering, setHoveredButton] = useState(null);
+    const navigate = useNavigate();
 
+    // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
-        setExpression((prev) => prev + ' ' + value);
+        setTextbox((prev) => prev + value);
+        setExpression((prev) => prev + value);
     };
 
+    // function to handle if the user uses keyboard typing
+    const handleInputChange = (e) => {
+        setExpression(e.target.value);
+        setTextbox(e.target.value);
+        if(e.target.value.endsWith('=') && !['x'].includes(expression)){
+            calculate();
+        }
+    };
+
+    // function to handle delete button 
+    const handleDelete = () =>{
+        setExpression((prev) => prev.slice(0, -1));
+        setTextbox((prev) => prev.slice(0, -1));
+    };
+
+    const handleEquationNavigation = () => {
+        navigate('/calculator/equation');
+    };
+
+    const Button = ({ label, style }) => (
+        <button
+            style={style(label)}
+            onMouseEnter={() => setHoveredButton(label)}
+            onMouseLeave={() => setHoveredButton(null)}
+            onClick={
+                label === 'CE' ? clearInput :
+                label === 'DEL' ? handleDelete :
+                (label == '=' && !['x'].includes(expression)) ? calculate :
+                label === 'Equation' ? handleEquationNavigation : 
+                () => handleButtonClick(label)
+            }
+        >
+            {label}
+        </button>
+    );
+    
+    const buttonStyle = (label) => ({
+        marginLeft: '2%',
+        marginTop: '2%',
+        backgroundColor: '#E5E7EB',
+        height: '8vh',
+        width: '4.51vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : (['+', '-', '*', '/', '='].includes(label) ? '#0084D1' : '#E5E7EB'),
+        
+    });
+
+    const mostLeftButtonStyle = (label) => ({
+        ...buttonStyle(label),
+        marginLeft: '0',
+    });
+
+    const specialButtonStyle = (label) => ({ 
+        marginLeft: label === '^' ? '0%' : '2%',
+        marginTop: '2%',
+        backgroundColor: '#E5E7EB',
+        height: '4vh',
+        width: '5.9vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
+            
+    })
+
+    const bottomButtonStyle = (label) => ({
+        marginTop: '2%',
+        marginLeft: label !== 'Matrix' ? '2%': '0%',
+        height: '5vh',
+        width: '7.65vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
+    })
     
 
     const calculate = async () => {
@@ -24,11 +109,14 @@ const Calculator = () => {
 
             const data = await response.json();
             if (response.ok) {
-                setResult(data.result);
-                setExpression((prev) => prev + ' =\n            '  + data.result + '\n');
+                const result = data.result;
+                setResult(result);
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
+                setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
                 setError(data.error);
+                setTextbox((prev) => (prev + '\n' + data.error + '\n'));
                 setResult(null);
 
             }
@@ -41,6 +129,7 @@ const Calculator = () => {
     const clearInput = () => {
         setExpression('');
         setResult(null);
+        setTextbox('');  
         setError('');
     };
 
@@ -49,99 +138,117 @@ const Calculator = () => {
         <div style={calcContainer}>
             <textarea
                 type="text"
-                value={expression}
-                onChange={(e) => setExpression(e.target.value)}
+                value={textbox}
+                onChange= { handleInputChange }
                 placeholder="Enter expression"
                 style={{...inputBox, resize: 'none'}}
             >
-                
             </textarea>
             <div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('7')}>7</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('8')}>8</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('9')}>9</button>
-                <button style={buttonStyle} onClick={(clearInput)}>CE</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('/')}>/</button>
+                <div style = { buttonRowStyle }>
+                    <Button label='7' style={mostLeftButtonStyle}/>
+                    <Button label='8' style={buttonStyle}/>
+                    <Button label='9' style={buttonStyle}/>
+                    <Button label='CE' style={buttonStyle} onClick={(clearInput)}/>
+                    <Button label='/' style={buttonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='4' style={mostLeftButtonStyle}/>
+                    <Button label='5' style={buttonStyle}/>
+                    <Button label='6' style={buttonStyle}/>
+                    <Button label='x' style={buttonStyle}/>
+                    <Button label='*' style={buttonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='1' style={mostLeftButtonStyle}/>
+                    <Button label='2' style={buttonStyle}/>
+                    <Button label='3' style={buttonStyle}/>
+                    <Button label='DEL' style={buttonStyle}/>
+                    <Button label='-' style={buttonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='0' style={mostLeftButtonStyle}/>
+                    <Button label='(' style={buttonStyle}/>
+                    <Button label=')' style={buttonStyle}/>
+                    <Button label='Rad' style={buttonStyle}/>
+                    <Button label='+' style={buttonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='^' style={specialButtonStyle}/>
+                    <Button label='.' style={specialButtonStyle}/>
+                    <Button label='π' style={specialButtonStyle}/>
+                    <Button label='e' style={specialButtonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='sin' style={mostLeftButtonStyle}/>
+                    <Button label='cos' style={buttonStyle}/>
+                    <Button label='tan' style={buttonStyle}/>
+                    <Button label='sqrt' style={buttonStyle}/>
+                    <Button label='!' style={buttonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='log' style={mostLeftButtonStyle}/>
+                    <Button label='exp' style={buttonStyle}/>
+                    <Button label='ln' style={buttonStyle}/>
+                    <Button label='|x|' style={buttonStyle}/>
+                    <Button label='=' style={buttonStyle}/>
+                    
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='Matrix' style={bottomButtonStyle}/>
+                    <Button label='Equation' style={bottomButtonStyle}/>
+                    <Button label='Graph' style={bottomButtonStyle}/>
+                    
+                </div>
+                
             </div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('4')}>4</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('5')}>5</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('6')}>6</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('2nd')}>2nd</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('*')}>*</button>
-            </div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('1')}>1</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('2')}>2</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('3')}>3</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('Del')}>DEL</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('-')}>-</button>
-            </div>
-            <div>
-                <button style={mostLeftButtonStyle} onClick={() => handleButtonClick('0')}>0</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('(')}>(</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick(')')}>)</button>
-                <button style={buttonStyle} onClick={() => handleButtonClick('Rad')}>Rad</button>
-                <button style={{ ...buttonStyle, backgroundColor: '#0084D1'}} onClick={() => handleButtonClick('+')}>+</button>
-            </div>
-            </div>
-
-            <button style={mostLeftButtonStyle} onClick={calculate}>Solve</button>
-            <button style={buttonStyle} onClick={clearInput}>Clear</button>
-
-            {result !== null && <p>Result: {result}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
         </div>
     );
 };
 
-const spaceBetween = 10;
+
+
 
 export default Calculator;
 
 const calcContainer = {
+    //display: "flex",
+    flexDirection: 'column',
     position: 'absolute',
-    left: '50%',
-    top: '50%',
+    left: '40%',
+    top: '57%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     borderColor: 'white',
-    height: 'auto',
-    width: 'auto',
+    height: '82vh',
+    width: '24vw',
     alignContent: 'center',
-    flex: 1,
-    padding: 40,
+    alignItems: 'center',
+    padding: '3vh',
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+    
 
 };
+
+const buttonRowStyle = {
+    display: 'flex',
+    //justifyContent: 'space-between', // Spreads buttons evenly within the row
+    width: '100%', // Ensures the row takes up the full width of the container
+    flexWrap: 'nowrap', // Allows buttons to wrap to the next line if needed
+    marginBottom: '1vh',
+};
+
+
 
 const inputBox = {
-    height: 100,
-    width: 435,
-    fontSize: 20,
+    height: '10vh',
+    width: '100%',
+    fontSize: '2.5vh',
 }
 
-const mostLeftButtonStyle = {
-    marginTop: 15,
-    backgroundColor: '#E5E7EB',
-    height: 80,
-    width: 80,
-    border: 0,
-    borderRadius: 10,
-    fontSize: 20,
-}
 
-const buttonStyle = {
-    marginLeft: spaceBetween,
-    marginTop: 15,
-    backgroundColor: '#E5E7EB',
-    height: 80,
-    width: 80,
-    border: 0,
-    borderRadius: 10,
-    fontSize: 20,
-};
+
+
 
 

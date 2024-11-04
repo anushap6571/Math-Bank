@@ -33,20 +33,20 @@ export default TopBar;
 const top = {
     backgroundColor: 'white',
     width: '100%',
-    height: 135,
+    height: '90%',
     flex: 1,
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0)',
 
 }
 
 const logo = {
-    width: 120,
-    height: 104,
+    width: '10vh',
+    height: '5vw',
 
 }
 
 const mathbank = {
-    fontSize: 20,
+    fontSize: '2vh',
     marginLeft: 20,
 
 }
