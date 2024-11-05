@@ -5,7 +5,7 @@ import EquationSolver from './components/EquationSolver';
 import Graph from './components/graph';
 import SignUpPage from './components/signup';
 import LogInPage from './components/login';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 
 function App() {
