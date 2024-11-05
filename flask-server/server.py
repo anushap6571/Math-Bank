@@ -5,6 +5,7 @@ from advanced_math import AdvancedMath
 from equation_solver import EquationSolver
 from graph import Graph
 from flask_sqlalchemy import SQLAlchemy
+
 import os
 
 # math bank controller
@@ -23,9 +24,31 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable = False)
 
 
+@app.route('/logInReq', methods = ['POST'])
+def logInReq():
+    try:
+        data = request.get_json()
+        print(f"recieved data: {data}")
+
+        testUser = data['username'] # passed username
+        testPassword = data['password'] # passed password
+        user = User.query.filter_by(username=testUser).first()
+
+        # print("user password = ", user.password) actual password behind the username
+
+        if user and (user.password == testPassword):
+             return jsonify({'Log In Successful' : True}), 200
+        else:
+             return jsonify({'Username or Password invalid' : False}), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': str(e)}), 500
+        
+
+
 @app.route('/sign-up', methods = ['POST'])
 def signup():
-    #print ("Sign Up EP hit")
     try:
         data = request.get_json()
 
@@ -35,7 +58,6 @@ def signup():
         print(f"User created: {new_user}")
         return jsonify({'message': 'User created successfully'}), 201           # confirmation
     except Exception as e:
-        #print ("error statement hit")
         print(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
 
