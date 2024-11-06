@@ -75,10 +75,8 @@ def calculate():
 
     try:
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
-        if any(func in expression for func in ['sin', 'cos', 'tan', 'abs', 'log', 'ln', 'sqrt', '^']):
+        if any(func in expression for func in ['sin', 'cos', 'tan', 'abs', 'log', 'ln', 'sqrt']):
             result = advanced_math.process(expression)
-        elif any(func in expression for func in ['x']):
-            result = equation_solver.process(expression)
         else:
             result = basic_math.process(expression)
         return jsonify({'result': result})
