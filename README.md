@@ -95,10 +95,36 @@ $ pip install flask-cors
 $ pip install sympy
 ```
 
+# for graphing feature
+
+```
+$ npm install react-plotly.js plotly.js
+```
+
+```
+$ pip install matplotlib numpy
+```
+
+```
+$ pip install plotly
+```
+
 # install router-dom
 
 ```
 $ npm install react-router-dom
+```
+
+# install react-bootstrap
+
+```
+$ npm install react-bootstrap bootstrap
+```
+
+# install react-hook-form
+
+```
+$ npm install react-hook-form
 ```
 
 # to run
