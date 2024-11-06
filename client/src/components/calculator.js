@@ -1,4 +1,7 @@
+// Anusha Patel - use case display calculator interface
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 const Calculator = () => {
@@ -7,7 +10,7 @@ const Calculator = () => {
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
     const [isHovering, setHoveredButton] = useState(null);
-
+    const navigate = useNavigate();
 
     // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
@@ -19,7 +22,7 @@ const Calculator = () => {
     const handleInputChange = (e) => {
         setExpression(e.target.value);
         setTextbox(e.target.value);
-        if(e.target.value.endsWith('=')){
+        if(e.target.value.endsWith('=') && !['x'].includes(expression)){
             calculate();
         }
     };
@@ -30,6 +33,10 @@ const Calculator = () => {
         setTextbox((prev) => prev.slice(0, -1));
     };
 
+    const handleEquationNavigation = () => {
+        navigate('/calculator/equation');
+    };
+
     const Button = ({ label, style }) => (
         <button
             style={style(label)}
@@ -38,7 +45,8 @@ const Calculator = () => {
             onClick={
                 label === 'CE' ? clearInput :
                 label === 'DEL' ? handleDelete :
-                label === '=' ? calculate :
+                (label == '=' && !['x'].includes(expression)) ? calculate :
+                label === 'Equation' ? handleEquationNavigation : 
                 () => handleButtonClick(label)
             }
         >
@@ -64,10 +72,22 @@ const Calculator = () => {
         marginLeft: '0',
     });
 
+    const specialButtonStyle = (label) => ({ 
+        marginLeft: label === '^' ? '0%' : '2%',
+        marginTop: '2%',
+        backgroundColor: '#E5E7EB',
+        height: '4vh',
+        width: '5.9vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+        backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
+            
+    })
+
     const bottomButtonStyle = (label) => ({
         marginTop: '2%',
-        marginLeft: label != 'Matrix' ? '2%': '0%',
-        backgroundColor: '#E5E7EB',
+        marginLeft: label !== 'Matrix' ? '2%': '0%',
         height: '5vh',
         width: '7.65vw',
         border: 0,
@@ -89,13 +109,14 @@ const Calculator = () => {
 
             const data = await response.json();
             if (response.ok) {
-                const newResult = data.result;
-                setResult(newResult);
-                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + newResult + '\n'); 
+                const result = data.result;
+                setResult(result);
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
                 setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
                 setError(data.error);
+                setTextbox((prev) => (prev + '\n' + data.error + '\n'));
                 setResult(null);
 
             }
@@ -135,7 +156,7 @@ const Calculator = () => {
                     <Button label='4' style={mostLeftButtonStyle}/>
                     <Button label='5' style={buttonStyle}/>
                     <Button label='6' style={buttonStyle}/>
-                    <Button label='2nd' style={buttonStyle}/>
+                    <Button label='x' style={buttonStyle}/>
                     <Button label='*' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
@@ -151,6 +172,12 @@ const Calculator = () => {
                     <Button label=')' style={buttonStyle}/>
                     <Button label='Rad' style={buttonStyle}/>
                     <Button label='+' style={buttonStyle}/>
+                </div>
+                <div style = { buttonRowStyle }>
+                    <Button label='^' style={specialButtonStyle}/>
+                    <Button label='.' style={specialButtonStyle}/>
+                    <Button label='π' style={specialButtonStyle}/>
+                    <Button label='e' style={specialButtonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
                     <Button label='sin' style={mostLeftButtonStyle}/>
@@ -175,12 +202,6 @@ const Calculator = () => {
                 </div>
                 
             </div>
-
-            
-    
-
-            {result !== null && <p>Result: {result}</p>}
-            {error && <p style={{ color: 'red' }}>{error}</p>}
         </div>
         </div>
     );
@@ -195,12 +216,12 @@ const calcContainer = {
     //display: "flex",
     flexDirection: 'column',
     position: 'absolute',
-    left: '50%',
+    left: '40%',
     top: '57%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     borderColor: 'white',
-    height: '75vh',
+    height: '82vh',
     width: '24vw',
     alignContent: 'center',
     alignItems: 'center',
@@ -217,6 +238,8 @@ const buttonRowStyle = {
     flexWrap: 'nowrap', // Allows buttons to wrap to the next line if needed
     marginBottom: '1vh',
 };
+
+
 
 const inputBox = {
     height: '10vh',

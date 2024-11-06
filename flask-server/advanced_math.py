@@ -25,7 +25,7 @@ class AdvancedMath:
             'ln': 'math.log',      # Natural log
             'sqrt': 'math.sqrt',
             # (Trisha) - adding more functions
-            'pow': 'math.pow',
+            '^': 'math.pow',
             'sind': 'math.radians(math.sin)',
             'cosd': 'math.radians(math.cos)',
             'tand': 'math.radians(math.tan)'

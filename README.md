@@ -42,7 +42,6 @@ Potential Risks:
 - Saving past equations from the user for future reference.
 - Working to integrate front end and back end.
 
-
 # Get Started
 
 # create virtual environment
@@ -90,10 +89,42 @@ mac and windows
 $ pip install flask-cors
 ```
 
+# for equation solving
+
+```
+$ pip install sympy
+```
+
+# for graphing feature
+
+```
+$ npm install react-plotly.js plotly.js
+```
+
+```
+$ pip install matplotlib numpy
+```
+
+```
+$ pip install plotly
+```
+
 # install router-dom
 
 ```
 $ npm install react-router-dom
+```
+
+# install react-bootstrap
+
+```
+$ npm install react-bootstrap bootstrap
+```
+
+# install react-hook-form
+
+```
+$ npm install react-hook-form
 ```
 
 # to run
