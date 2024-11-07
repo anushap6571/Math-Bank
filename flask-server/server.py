@@ -4,6 +4,7 @@ from basic_math import BasicMath
 from advanced_math import AdvancedMath
 from equation_solver import EquationSolver
 from graph import Graph
+from matrix import multiply_matrices, rref, determinant
 from flask_sqlalchemy import SQLAlchemy
 import os
 
@@ -11,6 +12,7 @@ import os
 
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) 
+
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 db = SQLAlchemy(app)
@@ -100,6 +102,32 @@ def plot_equation():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+
+@app.route('/calculator/matrix_multiply', methods=['POST'])
+def matrix_multiply():
+    data = request.get_json()
+    matrix_a = data.get('matrixA')
+    matrix_b = data.get('matrixB')
+    result = multiply_matrices(matrix_a, matrix_b)
+    return jsonify(result)
+
+@app.route('/calculator/matrix_rref', methods=['POST'])
+def matrix_rref():
+    data = request.get_json()
+    matrix = data.get('matrix')
+    result = rref(matrix)
+    return jsonify(result)
+
+@app.route('/calculator/matrix_determinant', methods=['POST'])
+def matrix_determinant():
+    data = request.get_json()
+    matrix = data.get('matrix')
+    result = determinant(matrix)
+    return jsonify(result)
+
+
+
 
 if __name__ == "__main__":
     with app.app_context():

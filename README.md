@@ -109,7 +109,13 @@ $ pip install matplotlib numpy
 $ pip install plotly
 ```
 
-# install router-dom
+# for matrix
+
+```
+$ npm install axios
+```
+
+# install router-dom under client
 
 ```
 $ npm install react-router-dom
@@ -121,14 +127,28 @@ $ npm install react-router-dom
 $ npm install react-bootstrap bootstrap
 ```
 
-# install react-hook-form
+# install react-hook-form under client
 
 ```
 $ npm install react-hook-form
 ```
 
+# for user database
+
+```
+$ pip install flask-sqlalchemy
+```
+
 # to run
+
+under flask-server
 
 ```
 $ python3 <pathname to server.py>
+```
+
+under client
+
+```
+$ npm start
 ```

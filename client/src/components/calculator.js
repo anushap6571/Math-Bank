@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 
+
 const Calculator = () => {
     const [expression, setExpression] = useState('');
     const [textbox, setTextbox] = useState('');
@@ -37,6 +38,10 @@ const Calculator = () => {
         navigate('/calculator/equation');
     };
 
+    const handleMatrixNavigation = () => {
+        navigate('/calculator/matrix');
+    };
+
     const Button = ({ label, style }) => (
         <button
             style={style(label)}
@@ -47,6 +52,7 @@ const Calculator = () => {
                 label === 'DEL' ? handleDelete :
                 (label == '=' && !['x'].includes(expression)) ? calculate :
                 label === 'Equation' ? handleEquationNavigation : 
+                label === 'Matrix' ? handleMatrixNavigation : 
                 () => handleButtonClick(label)
             }
         >
