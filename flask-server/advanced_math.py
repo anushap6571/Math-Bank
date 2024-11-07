@@ -9,10 +9,21 @@ class AdvancedMath:
         # Check for valid characters including allowed functions
         if not re.match(r'^[\d+\-*/().a-z]+$', expression):
             raise ValueError("Expression contains invalid characters.")
+        
+        # (Rohan) Replace absolute value expressions
+        expression = self.replace_absolute_values(expression)
 
         # Evaluate the expression after replacing functions with the correct methods
         expression = self.replace_functions(expression)
         return eval(expression)
+    
+        # (Rohan) - absolute value handling
+    def replace_absolute_values(self, expression):
+        # Regular expression to find absolute value patterns
+        pattern = r'\|([^|]+)\|'
+        while re.search(pattern, expression):
+            expression = re.sub(pattern, r'math.fabs(\1)', expression)
+        return expression
     
     def replace_functions(self, expression):
         # Mapping of function names in the expression to the `math` module's functions
@@ -28,7 +39,11 @@ class AdvancedMath:
             '^': 'math.pow',
             'sind': 'math.radians(math.sin)',
             'cosd': 'math.radians(math.cos)',
-            'tand': 'math.radians(math.tan)'
+            'tand': 'math.radians(math.tan)',
+            # (Rohan) - Adding advanced symbols
+            'e': 'math.e',      
+            'pi': 'math.pi',
+            '^': '**',   
         }
         
         # Replace each function name in the expression with `math` function
