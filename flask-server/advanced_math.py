@@ -7,7 +7,7 @@ class AdvancedMath:
         expression = expression.replace(" ", "")
         
         # Check for valid characters including allowed functions
-        if not re.match(r'^[\d+\-*/().a-z]+$', expression):
+        if not re.match(r'^[\d+\-*/()|.a-z]+$', expression):
             raise ValueError("Expression contains invalid characters.")
         
         # (Rohan) Replace absolute value expressions
@@ -42,7 +42,7 @@ class AdvancedMath:
             'tand': 'math.radians(math.tan)',
             # (Rohan) - Adding advanced symbols
             'e': 'math.e',      
-            'pi': 'math.pi',
+            'π': 'math.pi',
             '^': '**',   
         }
         

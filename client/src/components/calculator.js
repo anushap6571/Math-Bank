@@ -162,14 +162,14 @@ const Calculator = () => {
                     <Button label='4' style={mostLeftButtonStyle}/>
                     <Button label='5' style={buttonStyle}/>
                     <Button label='6' style={buttonStyle}/>
-                    <Button label='x' style={buttonStyle}/>
+                    <Button label='DEL' style={buttonStyle}/>
                     <Button label='*' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
                     <Button label='1' style={mostLeftButtonStyle}/>
                     <Button label='2' style={buttonStyle}/>
                     <Button label='3' style={buttonStyle}/>
-                    <Button label='DEL' style={buttonStyle}/>
+                    <Button label='Deg' style={buttonStyle}/>
                     <Button label='-' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
@@ -223,7 +223,7 @@ const calcContainer = {
     flexDirection: 'column',
     position: 'absolute',
     left: '40%',
-    top: '57%',
+    top: '60%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     borderColor: 'white',
