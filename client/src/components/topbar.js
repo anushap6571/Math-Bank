@@ -28,7 +28,7 @@ export default TopBar;
 const top = {
     backgroundColor: 'white',
     width: '100%',
-    height: '8vw',
+    height: '7vw',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
