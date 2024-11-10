@@ -21,9 +21,15 @@ const Calculator = () => {
 
     // function to handle if the user uses keyboard typing
     const handleInputChange = (e) => {
-        setExpression(e.target.value);
-        setTextbox(e.target.value);
-        if(e.target.value.endsWith('=') && !['x'].includes(expression)){
+        const input = e.target.value;
+        setTextbox(input);
+
+        // Set `expression` to the current line only
+        const currentLine = input.split('\n').pop();
+        setExpression(currentLine);
+
+        if (currentLine.endsWith('=') && !['x'].includes(expression)) {
+            setExpression(currentLine.slice(0, -1)); // Remove '=' for calculation
             calculate();
         }
     };
