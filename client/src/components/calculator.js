@@ -223,7 +223,7 @@ const Calculator = () => {
                 </div>
                 <div style = { buttonRowStyle }>
                     <Button label='log' style={mostLeftButtonStyle}/>
-                    <Button label='exp' style={buttonStyle}/>
+                    <Button label='%' style={buttonStyle}/>
                     <Button label='ln' style={buttonStyle}/>
                     <Button label='|x|' style={buttonStyle}/>
                     <Button label='=' style={buttonStyle}/>

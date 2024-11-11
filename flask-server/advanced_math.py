@@ -7,7 +7,7 @@ class AdvancedMath:
         expression = expression.replace(" ", "")
         
         # Check for valid characters including allowed functions
-        if not re.match(r'^[π\d+\-*^/()|.!a-z]+$', expression):
+        if not re.match(r'^[π\d+\-*%^/()|.!a-z]+$', expression):
              print("error not valid")
              raise ValueError("Expression contains invalid characters.")
         
