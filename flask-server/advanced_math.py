@@ -7,8 +7,9 @@ class AdvancedMath:
         expression = expression.replace(" ", "")
         
         # Check for valid characters including allowed functions
-        # if not re.match(r'^[\d+\-*/()|.a-z]+$', expression):
-        #     raise ValueError("Expression contains invalid characters.")
+        if not re.match(r'^[π\d+\-*^/()|.a-z]+$', expression):
+             print("error not valid")
+             raise ValueError("Expression contains invalid characters.")
         
         print("before adding * " + expression)
         # Insert multiplication symbol between number and trig functions or constants
@@ -21,9 +22,6 @@ class AdvancedMath:
 
         # Evaluate the expression after replacing functions with the correct methods
         expression = self.replace_functions(expression)
-
-        
-
         
         return eval(expression)
     
@@ -37,7 +35,7 @@ class AdvancedMath:
     
     def insert_multiplication(self, expression):
         # Pattern to detect a number followed by a trig function or constants
-        pattern = r'(\d)([a-zA-Z\(])'
+        pattern = r'(\d)([a-zA-Z\(π])'
         
         # Insert '*' between the number and the function/constant
         expression = re.sub(pattern, r'\1*\2', expression)
@@ -65,6 +63,7 @@ class AdvancedMath:
             # (Rohan) - Adding advanced symbols
             'e': 'math.e',      
             'π': 'math.pi',
+            '\^': '**'
             
             
             
