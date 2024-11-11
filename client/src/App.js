@@ -5,13 +5,15 @@ import EquationSolver from './components/EquationSolver';
 import Graph from './components/graph';
 import SignUpPage from './components/signup';
 import LogInPage from './components/login';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Matrix from './components/matrix'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
 function App() {
     const[equation, setEquation] = useState('');
             
     return (
+      <div>
         <Router>
             <div>
                 <TopBar/>
@@ -22,7 +24,7 @@ function App() {
                         <Route path ="/" element = {<LogInPage/>}/>
                     </Routes>
                     <Routes>
-                        <Route path ="/Calc" element = {<Calculator/>}/>
+                        <Route path ="/calculator" element = {<Calculator/>}/>
                     </Routes>
                     <Routes>
                         <Route path="/calculator/equation" element=
@@ -32,9 +34,16 @@ function App() {
                                 <Graph equation={equation} setEquation={setEquation}/>
                             </>
                         }/>
+                        <Route path="/calculator/matrix" element=
+                        {
+                            <>
+                                <Matrix/>
+                            </>
+                        }/>
                     </Routes>
             </div>
         </Router>
+      </div>
 
     );
 }

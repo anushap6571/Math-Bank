@@ -1,7 +1,7 @@
 # Diego Jimenez DAJ220000: Database for all user information
 
-from server import app, db, User
-
+from server import app
+from user import db, User
 def query_users():
     users = User.query.all()
     for user in users:          # prints all of the users in database
