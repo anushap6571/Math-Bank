@@ -4,7 +4,10 @@ from basic_math import BasicMath
 from advanced_math import AdvancedMath
 from equation_solver import EquationSolver
 from graph import Graph
+from matrix import multiply_matrices, rref, determinant
 from flask_sqlalchemy import SQLAlchemy
+from user import db, User
+
 import os
 
 # math bank controller
@@ -12,20 +15,40 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) 
 
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-db = SQLAlchemy(app)
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(25), unique =True, nullable = False)
-    email = db.Column(db.String(30), unique = True, nullable = False)
-    password = db.Column(db.String(120), nullable = False)
+db.init_app(app)
+
+def create_tables():
+    db.create_all()
+
+@app.route('/logInReq', methods = ['POST'])
+def logInReq():
+    try:
+        data = request.get_json()
+        print(f"recieved data: {data}")
+
+        testUser = data['username'] # passed username
+        testPassword = data['password'] # passed password
+        user = User.query.filter_by(username=testUser).first()
+
+        # print("user password = ", user.password) #actual password behind the username
+
+        if user and (user.password == testPassword):
+             return jsonify({'Log In Successful' : True}), 200
+        else:
+             return jsonify({'Username or Password invalid' : False}), 200
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({'error': str(e)}), 500
+        
 
 
 @app.route('/sign-up', methods = ['POST'])
 def signup():
-    #print ("Sign Up EP hit")
     try:
         data = request.get_json()
 
@@ -35,7 +58,6 @@ def signup():
         print(f"User created: {new_user}")
         return jsonify({'message': 'User created successfully'}), 201           # confirmation
     except Exception as e:
-        #print ("error statement hit")
         print(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
 
@@ -50,13 +72,13 @@ graph = Graph()
 def calculate():
     data = request.get_json()
     expression = data.get('expression')
+    print(expression)
 
     try:
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
-        if any(func in expression for func in ['sin', 'cos', 'tan', 'abs', 'log', 'ln', 'sqrt', '^']):
+        if any(func in expression for func in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '|', '!', 'π', 'e']):
+            print("is going to advanced math")
             result = advanced_math.process(expression)
-        elif any(func in expression for func in ['x']):
-            result = equation_solver.process(expression)
         else:
             result = basic_math.process(expression)
         return jsonify({'result': result})
@@ -100,6 +122,32 @@ def plot_equation():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+
+@app.route('/calculator/matrix_multiply', methods=['POST'])
+def matrix_multiply():
+    data = request.get_json()
+    matrix_a = data.get('matrixA')
+    matrix_b = data.get('matrixB')
+    result = multiply_matrices(matrix_a, matrix_b)
+    return jsonify(result)
+
+@app.route('/calculator/matrix_rref', methods=['POST'])
+def matrix_rref():
+    data = request.get_json()
+    matrix = data.get('matrix')
+    result = rref(matrix)
+    return jsonify(result)
+
+@app.route('/calculator/matrix_determinant', methods=['POST'])
+def matrix_determinant():
+    data = request.get_json()
+    matrix = data.get('matrix')
+    result = determinant(matrix)
+    return jsonify(result)
+
+
+
 
 if __name__ == "__main__":
     with app.app_context():

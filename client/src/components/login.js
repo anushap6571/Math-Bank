@@ -1,53 +1,87 @@
 // Diego Jimenez, DAJ220000, Log In File
-import React, {useState} from 'react'
-import {Form, Button} from 'react-bootstrap'
-import {Link} from 'react-router-dom'
+import React from 'react';
+import {Form, Button} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+import {useForm} from 'react-hook-form';
 
-const LogInPage=()=>{
+const LogInPage = () => {
 
-    const [username, setUsername] = useState('');       // allows the user to controll the states of
-    const [password, setPassword] = useState('');       // username and password in the prompt box
-    
-    const submitLogIn=()=>{
-        console.log("Form Submitted");      
-        setUsername('')                     // same code from sign up, resets username and password in
-        setPassword('')                     // the prompt box once submitted
-    }
+    const {register, reset, handleSubmit, formState:{errors}} = useForm();
 
-    return(
-        <div className = "home"> 
-            <h1>Log In Page</h1>                            {/* code below is the same as */}
-            <form>                                          {/* sign up, just without the email*/}
-                <Form.Group>                                {/* since users only need Username, Pass to log in*/}
+    const submitLogIn = (logInData) => {
+
+        console.log(logInData);
+
+        const body = {
+            username: logInData.username,
+            password: logInData.password
+        };
+
+        fetch('http://127.0.0.1:5000/logInReq', {  
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify(logInData)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response bad.');
+            }
+            return response.json();
+        })
+        .then(logInData => {
+            console.log('Success', logInData);
+
+            if (logInData['Log In Successful']) {
+                alert('Log In Successful');
+            } else {
+                alert('Username or Password invalid');
+            }
+        })
+        .catch((error) => {
+            console.log('Error from catch \n', error);
+            alert('Username or Password invalid');
+        });
+
+        reset();
+    };
+
+    return (
+        <div className="home">  
+            <h1>Log In Page</h1>
+            <form>
+                <Form.Group>
                     <Form.Label>Username: </Form.Label>
-                    <Form.Control type ="text" 
+                    <Form.Control type="text"
                     placeholder="Enter your Username"
-                    value = {username}
-                    name = "username"
-                    onChange={(e)=> {setUsername(e.target.value)}}
+                    {...register("username", {required: true, maxLength: 25})}
                     />
                 </Form.Group>
+                {errors.username && <span style={{color: "red"}}>Username is required</span>}
                 <br></br>
+                {errors.username?.type === "maxLength" && <span style={{color: "red"}}>Max username length is 25 characters</span>}
+
                 <Form.Group>
                     <Form.Label>Password: </Form.Label>
-                    <Form.Control type ="password" 
+                    <Form.Control type="password"
                     placeholder="Create a Password"
-                    value = {password}
-                    name = "password"
-                    onChange={(e)=> {setPassword(e.target.value)}}
+                    {...register("password", {required: true, minLength: 8})}
                     />
                 </Form.Group>
+                {errors.password && <span style={{color: "red"}}>Password is required</span>}
                 <br></br>
+                {errors.password?.type === "minLength" && <span style={{color: "red"}}>Min password length is 8 characters</span>}
                 <Form.Group>
-                    <Button id="sub" onClick={submitLogIn}>Log In</Button>          {/* confirmation button to log in*/}
+                    <Button id="sub" onClick={handleSubmit(submitLogIn)}>Log In</Button>
                 </Form.Group>
                 <Form.Group>
                     <br></br>
-                    <small>Don't have an account? <Link to="/sign-up">Sign Up</Link></small>        {/* takes the user to Sign Up if they dont have an account*/}
+                    <small>Don't have an Account? <Link to="/sign-up">Sign Up</Link></small>
                 </Form.Group>
             </form>
         </div>
-    )
-}
+    );
+};
 
-export default LogInPage
+export default LogInPage;
