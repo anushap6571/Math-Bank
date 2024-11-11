@@ -2,4 +2,4 @@ testenv/
 node_modules/
 __pycache__/
 assets/
-envi/
+envi/flask-server/instance/users.db
