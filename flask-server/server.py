@@ -6,6 +6,7 @@ from equation_solver import EquationSolver
 from graph import Graph
 from matrix import multiply_matrices, rref, determinant
 from flask_sqlalchemy import SQLAlchemy
+from user import db, User
 
 import os
 
@@ -16,15 +17,12 @@ CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-db = SQLAlchemy(app)
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(25), unique =True, nullable = False)
-    email = db.Column(db.String(30), unique = True, nullable = False)
-    password = db.Column(db.String(120), nullable = False)
+db.init_app(app)
 
+def create_tables():
+    db.create_all()
 
 @app.route('/logInReq', methods = ['POST'])
 def logInReq():
@@ -36,7 +34,7 @@ def logInReq():
         testPassword = data['password'] # passed password
         user = User.query.filter_by(username=testUser).first()
 
-        # print("user password = ", user.password) actual password behind the username
+        # print("user password = ", user.password) #actual password behind the username
 
         if user and (user.password == testPassword):
              return jsonify({'Log In Successful' : True}), 200
