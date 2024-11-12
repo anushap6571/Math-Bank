@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
 import { useNavigate } from 'react-router-dom';
 
-const SignUpPage=()=>{
+const SignUpPage=({setIsLoggedIn, setUsername})=>{
 
     const {register, reset, handleSubmit, formState:{errors}} = useForm();
     const Navigate = useNavigate();
@@ -36,7 +36,10 @@ const SignUpPage=()=>{
             .then(data=>{
                 console.log('Success', data);
                 alert('User created');
-
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', data.username)
+                setIsLoggedIn(true);
+                setUsername(data.username);
                 Navigate('/calculator');
             })
             .catch((error) =>{

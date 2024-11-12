@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Calculator from './components/calculator';
 import TopBar from './components/topbar';
 import EquationSolver from './components/EquationSolver'; 
@@ -11,19 +11,26 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 
 function App() {
     const[equation, setEquation] = useState('');
-            
+        
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [username, setUsername] = useState('');
+
+    useEffect(() => {
+        const loggedInStatus = localStorage.getItem('isLoggedIn') === 'false';
+        const storedUsername = localStorage.getItem('username');
+        console.log("Retrieved storedUsername: ", storedUsername);
+        setIsLoggedIn(loggedInStatus);
+        setUsername(storedUsername);
+    }, []);
+
     return (
       <div>
         <Router>
             <div>
-                <TopBar/>
+                <TopBar isLoggedIn={isLoggedIn} username = {username}/>
                     <Routes>
-                        <Route path ="/sign-up" element = {<SignUpPage/>}/>
-                    </Routes>
-                    <Routes>
-                        <Route path ="/" element = {<LogInPage/>}/>
-                    </Routes>
-                    <Routes>
+                        <Route path ="/sign-up" element = {<SignUpPage setIsLoggedIn = {setIsLoggedIn} setUsername={setUsername}/>}/>
+                        <Route path ="/" element = {<LogInPage setIsLoggedIn = {setIsLoggedIn} setUsername={setUsername}/>}/>
                         <Route path ="/calculator" element = {<Calculator/>}/>
                     </Routes>
                     <Routes>
@@ -34,11 +41,7 @@ function App() {
                                 <Graph equation={equation} setEquation={setEquation}/>
                             </>
                         }/>
-                        <Route path="/calculator/matrix" element=
-                        {
-                            <>
-                                <Matrix/>
-                            </>
+                        <Route path="/calculator/matrix" element= { <><Matrix/></>
                         }/>
                     </Routes>
             </div>

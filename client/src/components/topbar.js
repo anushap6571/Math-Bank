@@ -1,27 +1,38 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 
-const TopBar = () => {
-    return( 
+const TopBar = ({ isLoggedIn , username}) => {
+    console.log("topbar username: ", username);
+    console.log("isLoggedIn status: ", isLoggedIn);
+    return (
         <div style={top}>
-            <img src={require('../assets/mathbank-logo.png')} alt="Math Bank Logo" style={logo}/>
+            <img src={require('../assets/mathbank-logo.png')} alt="Math Bank Logo" style={logo} />
             <div style={navbar}>
                 <div style={mathbank}>Math Bank</div>
                 <div style={buttonContainer}>
                     <Link to="/calculator" style={linkStyle}>
                         <button style={buttonStyle}>Calculator</button>
                     </Link>
-                    <Link to="/sign-up" style={linkStyle}>
-                        <button style={buttonStyle}>Sign Up</button>
-                    </Link>
-                    <Link to="/" style={linkStyle}>
-                        <button style={buttonStyle}>Login</button>
-                    </Link>
+                    {!isLoggedIn && (
+                        <>
+                            <Link to="/sign-up" style={linkStyle}>
+                                <button style={buttonStyle}>Sign Up</button>
+                            </Link>
+                            <Link to="/" style={linkStyle}>
+                                <button style={buttonStyle}>Login</button>
+                            </Link>
+                        </>
+                    )}
+                    {isLoggedIn &&(
+                        <div>
+                            Welcome, {username}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default TopBar;
 

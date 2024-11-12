@@ -5,12 +5,10 @@ import {Link} from 'react-router-dom';
 import {useForm} from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
-const LogInPage = () => {
-
+const LogInPage = ({setIsLoggedIn, setUsername}) => {
     const {register, reset, handleSubmit, formState:{errors}} = useForm();
     const Navigate = useNavigate();
     
-
     const submitLogIn = (logInData) => {
 
         console.log(logInData);
@@ -38,6 +36,10 @@ const LogInPage = () => {
 
             if (logInData['Log In Successful']) {
                 alert('Log In Successful');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', logInData.username)
+                setIsLoggedIn(true);
+                setUsername(logInData.username);
                 Navigate('/calculator')     // Move to calculator screen
             } else {
                 alert('Username or Password invalid');
