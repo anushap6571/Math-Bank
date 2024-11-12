@@ -4,12 +4,12 @@ import React,{useState} from 'react'
 import {Form, Button} from 'react-bootstrap'
 import {Link} from 'react-router-dom'
 import {useForm} from 'react-hook-form'
-
+import { useNavigate } from 'react-router-dom';
 
 const SignUpPage=()=>{
 
     const {register, reset, handleSubmit, formState:{errors}} = useForm();
-
+    const Navigate = useNavigate();
 
     const submitSignUp=(data)=>{
             console.log(data)
@@ -36,10 +36,12 @@ const SignUpPage=()=>{
             .then(data=>{
                 console.log('Success', data);
                 alert('User created');
+
+                Navigate('/calculator');
             })
             .catch((error) =>{
                 console.log('Error from catch \n', error);
-                //alert(`Error (HERE): ${JSON.stringify(error)}`);
+                alert('This Username already exists in Math Bank')
             })
            
             reset()
