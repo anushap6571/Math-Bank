@@ -1,6 +1,8 @@
 // Anusha Patel - use case display calculator interface
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 
 
 const Calculator = () => {
@@ -9,7 +11,8 @@ const Calculator = () => {
     const [result, setResult] = useState(null);
     const [error, setError] = useState('');
     const [isHovering, setHoveredButton] = useState(null);
-
+    const navigate = useNavigate();
+    const [isDegreeMode, setIsDegreeMode] = useState(false); // Track mode (Degree/Radian)
 
     // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
@@ -19,9 +22,15 @@ const Calculator = () => {
 
     // function to handle if the user uses keyboard typing
     const handleInputChange = (e) => {
-        setExpression(e.target.value);
-        setTextbox(e.target.value);
-        if(e.target.value.endsWith('=') && !['x'].includes(expression)){
+        const input = e.target.value;
+        setTextbox(input);
+
+        // Set `expression` to the current line only
+        const currentLine = input.split('\n').pop();
+        setExpression(currentLine);
+
+        if (currentLine.endsWith('=')) {
+            setExpression(currentLine.slice(0, -1)); // Remove '=' for calculation
             calculate();
         }
     };
@@ -32,8 +41,12 @@ const Calculator = () => {
         setTextbox((prev) => prev.slice(0, -1));
     };
 
-    const equationSolver = async () =>{
+    const handleEquationNavigation = () => {
+        navigate('/calculator/equation');
+    };
 
+    const handleMatrixNavigation = () => {
+        navigate('/calculator/matrix');
     };
 
     const Button = ({ label, style }) => (
@@ -44,14 +57,19 @@ const Calculator = () => {
             onClick={
                 label === 'CE' ? clearInput :
                 label === 'DEL' ? handleDelete :
-                (label == '=' && !['x'].includes(expression)) ? calculate :
-                label === 'Equation' ? calculate :
+                label == '=' ? calculate :
+                label === 'Equation' ? handleEquationNavigation : 
+                label === 'Matrix' ? handleMatrixNavigation : 
+                label === 'Deg' ? toggleMode :
+                label === 'Rad' ? toggleMode :
                 () => handleButtonClick(label)
             }
         >
             {label}
         </button>
     );
+
+
     
     const buttonStyle = (label) => ({
         marginLeft: '2%',
@@ -94,10 +112,28 @@ const Calculator = () => {
         fontSize: '2vh',
         backgroundColor: isHovering === label ? '#588AEE' : '#E5E7EB',
     })
+
+    const modeButtonStyle = (label) => ({
+        marginLeft: '2%',
+        marginTop: '2%',
+        backgroundColor: isHovering === label || (label === 'Deg' && isDegreeMode) || (label === 'Rad' && !isDegreeMode) ? '#588AEE' : '#E5E7EB',
+        height: '8vh',
+        width: '4.51vw',
+        border: 0,
+        borderRadius: '0.5rem',
+        fontSize: '2vh',
+    });
     
+    const toggleMode = () => {
+
+        setIsDegreeMode((prevMode) => !prevMode);
+        
+
+    };
 
     const calculate = async () => {
         try {
+            
             const response = await fetch('http://127.0.0.1:5000/calculator', {
                 method: 'POST',
                 headers: {
@@ -108,9 +144,9 @@ const Calculator = () => {
 
             const data = await response.json();
             if (response.ok) {
-                const newResult = data.result;
-                setResult(newResult);
-                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + newResult + '\n'); 
+                const result = data.result;
+                setResult(result);
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
                 setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
@@ -155,21 +191,21 @@ const Calculator = () => {
                     <Button label='4' style={mostLeftButtonStyle}/>
                     <Button label='5' style={buttonStyle}/>
                     <Button label='6' style={buttonStyle}/>
-                    <Button label='x' style={buttonStyle}/>
+                    <Button label='DEL' style={buttonStyle}/>
                     <Button label='*' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
                     <Button label='1' style={mostLeftButtonStyle}/>
                     <Button label='2' style={buttonStyle}/>
                     <Button label='3' style={buttonStyle}/>
-                    <Button label='DEL' style={buttonStyle}/>
+                    <Button label='Deg' style={modeButtonStyle}/>
                     <Button label='-' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
                     <Button label='0' style={mostLeftButtonStyle}/>
                     <Button label='(' style={buttonStyle}/>
                     <Button label=')' style={buttonStyle}/>
-                    <Button label='Rad' style={buttonStyle}/>
+                    <Button label='Rad' style={modeButtonStyle}/>
                     <Button label='+' style={buttonStyle}/>
                 </div>
                 <div style = { buttonRowStyle }>
@@ -216,7 +252,7 @@ const calcContainer = {
     flexDirection: 'column',
     position: 'absolute',
     left: '40%',
-    top: '57%',
+    top: '60%',
     transform: 'translate(-50%, -50%)',
     backgroundColor: 'white',
     borderColor: 'white',

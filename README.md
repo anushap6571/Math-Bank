@@ -95,14 +95,60 @@ $ pip install flask-cors
 $ pip install sympy
 ```
 
-# install router-dom
+# for graphing feature
+
+```
+$ npm install react-plotly.js plotly.js
+```
+
+```
+$ pip install matplotlib numpy
+```
+
+```
+$ pip install plotly
+```
+
+# for matrix
+
+```
+$ npm install axios
+```
+
+# install router-dom under client
 
 ```
 $ npm install react-router-dom
 ```
 
+# install react-bootstrap
+
+```
+$ npm install react-bootstrap bootstrap
+```
+
+# install react-hook-form under client
+
+```
+$ npm install react-hook-form
+```
+
+# for user database
+
+```
+$ pip install flask-sqlalchemy
+```
+
 # to run
+
+under flask-server
 
 ```
 $ python3 <pathname to server.py>
+```
+
+under client
+
+```
+$ npm start
 ```
