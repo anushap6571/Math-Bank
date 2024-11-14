@@ -6,6 +6,7 @@ import Graph from './components/graph';
 import SignUpPage from './components/signup';
 import LogInPage from './components/login';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Notes from './components/notes';
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Router>
             <div>
                 <TopBar/>
+                    
                     <Routes>
                         <Route path ="/sign-up" element = {<SignUpPage/>}/>
                     </Routes>
@@ -22,12 +24,19 @@ function App() {
                         <Route path ="/" element = {<LogInPage/>}/>
                     </Routes>
                     <Routes>
-                        <Route path ="/Calc" element = {<Calculator/>}/>
+                        
+                    <Route path="/Calc" element={
+                        <>
+                            <Calculator />
+                            <Notes />
+                        </>
+                    } />
                     </Routes>
                     <Routes>
                         <Route path="/calculator/equation" element=
                         {
                             <>
+                                <Notes />
                                 <EquationSolver equation={equation} setEquation={setEquation} />
                                 <Graph equation={equation} setEquation={setEquation}/>
                             </>

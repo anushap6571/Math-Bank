@@ -100,6 +100,37 @@ def plot_equation():
         return jsonify(result)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+    # Route to add a note
+@app.route('/add_note', methods=['POST'])
+def add_note_router():
+    if 'user_id' in session: 
+        content = request.json.get('content')
+        new_note = Note(content=content, user_id=session['user_id'])
+        db.session.add(new_note)
+        db.session.commit()
+        return jsonify({'status': 'Note added successfully'}), 201
+    return jsonify({'error': 'User not logged in'}), 401
+
+# Route to get all notes for a user
+@app.route('/get_notes', methods=['GET'])
+def get_notes_route():
+    if 'user_id' in session:
+        notes = Note.query.filter_by(user_id=session['user_id']).all()
+        return jsonify([{'id': note.id, 'content': note.content} for note in notes]), 200
+    return jsonify({'error': 'User not logged in'}), 401
+
+# Route to delete a note
+@app.route('/delete_note/<int:note_id>', methods=['DELETE'])
+def delete_note_route(note_id):
+    if 'user_id' in session:
+        note = Note.query.filter_by(id=note_id, user_id=session['user_id']).first()
+        if note:
+            db.session.delete(note)
+            db.session.commit()
+            return jsonify({'status': 'Note deleted successfully'}), 200
+        return jsonify({'error': 'Note not found'}), 404
+    return jsonify({'error': 'User not logged in'}), 401
+
 
 if __name__ == "__main__":
     with app.app_context():

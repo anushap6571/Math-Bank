@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 // import '.App.css';
 
-
 const Notes = () => {
     const [note, setNote] = useState('');
     const [notesList, setNotesList] = useState([]);
@@ -20,7 +19,7 @@ const Notes = () => {
 
     const handleAddNote = () => {
         if (note) {
-            setNotesList([...notesList, note]);
+            setNotesList([note, ...notesList]); // Add new note at the beginning of the list
             setNote(''); // Clear input after adding
         }
     };
@@ -31,29 +30,61 @@ const Notes = () => {
     };
 
     return (
-        <div className="notes-container">
-            <h2 className="notes-title">Notes</h2>
-            <div className="note-input">
-                <input
-                    type="text"
-                    value={note}
-                    onChange={(e) => setNote(e.target.value)}
-                    placeholder="Add a math note"
-                    className="note-input-field"
-                />
-                <button onClick={handleAddNote} className="add-note-button">Add</button>
+        <div style={{ backgroundColor: '#F3F4F6', minHeight: '100vh', minWidth: '100vh' }}>
+            <div style={notesContainerStyle}>
+                <h2 className="notes-title" style={notesTitleStyle}>Notes</h2>
+                <div className="note-input" style={noteInputContainerStyle}>
+                    <input
+                        type="text"
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleAddNote()}
+                        placeholder="Add a math note"
+                        className="note-input-field"
+                    />
+                    <button onClick={handleAddNote} className="add-note-button">Add</button>
+                </div>
+                <ul className="notes-list" style={notesListStyle}>
+                    {notesList.map((n, index) => (
+                        <li key={index} className="note-item">
+                            {n}
+                            <button onClick={() => handleDeleteNote(index)} className="delete-note-button">X</button>
+                        </li>
+                    ))}
+                </ul>
             </div>
-            <ul className="notes-list">
-                {notesList.map((n, index) => (
-                    <li key={index} className="note-item">
-                        {n}
-                        <button onClick={() => handleDeleteNote(index)} className="delete-note-button">X</button>
-                    </li>
-                ))}
-            </ul>
         </div>
     );
 };
 
-export default Notes;
+const notesContainerStyle = {
+    backgroundColor: '#D1D5DB', // Lighter gray
+    width: '20%',
+    height: '20vw',
+    padding: '10px',
+    borderRadius: '8px',
+    overflow: 'hidden', // Prevent content from flowing outside
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'flex-start', // Align content to the left edge
+};
 
+const notesTitleStyle = {
+    margin: 0, // Remove default margin for the title
+    paddingBottom: '5px', // Small space between title and input
+};
+
+const noteInputContainerStyle = {
+    display: 'flex',
+    width: '100%', // Make input and button take full width
+    marginBottom: '10px',
+};
+
+const notesListStyle = {
+    maxHeight: '15vw', // Limit height of the notes list
+    overflowY: 'auto', // Enable vertical scrolling
+    width: '100%', // Ensure it takes full width of container
+    paddingRight: '5px',
+};
+
+export default Notes;
