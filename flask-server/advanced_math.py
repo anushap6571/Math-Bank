@@ -2,12 +2,12 @@ import math
 import re
 #(Rohan) - Working on adding the basics of advanced math
 class AdvancedMath:
-    def process(self, expression): 
+    def process(self, expression, isDegreeMode): 
         # Remove whitespace
         expression = expression.replace(" ", "")
         
         # Check for valid characters including allowed functions
-        if not re.match(r'^[π\d+\-*^/()|.!a-z]+$', expression):
+        if not re.match(r'^[π\d+\-*%^/()|.!a-z]+$', expression):
              print("error not valid")
              raise ValueError("Expression contains invalid characters.")
         
@@ -16,7 +16,9 @@ class AdvancedMath:
         expression = self.insert_multiplication(expression)
         print("after adding * " + expression)
 
-
+        print(isDegreeMode)
+        if(isDegreeMode):
+            expression = self.replace_to_degrees(expression)
         # (Rohan) Replace absolute value expressions
         expression = self.replace_absolute_values(expression)
 
@@ -33,6 +35,25 @@ class AdvancedMath:
             expression = re.sub(pattern, r'math.fabs(\1)', expression)
         return expression
     
+
+
+
+    def replace_to_degrees(self, expression):
+        print("in the function to replace")
+
+        # Use regular expressions to match and replace sin, cos, and tan
+        expression = re.sub(r'\bsin\(([^)]+)\)', r'sin(math.radians(\1))', expression)
+        expression = re.sub(r'\bcos\(([^)]+)\)', r'cos(math.radians(\1))', expression)
+        expression = re.sub(r'\btan\(([^)]+)\)', r'tan(math.radians(\1))', expression)
+
+        print("after replacing to degrees: " + expression)
+        return expression
+
+
+
+
+
+
     def insert_multiplication(self, expression):
         # Pattern to detect a number followed by a trig function or constants
         pattern = r'(\d)([a-zA-Z\(π])'
@@ -43,16 +64,16 @@ class AdvancedMath:
         return expression
     def replace_functions(self, expression):
         # Mapping of function names in the expression to the `math` module's functions
-        print("is trying to replace function")
+       
         function_map = {
             'sin': 'math.sin',
             'cos': 'math.cos',
             'tan': 'math.tan',
 
-            'sind': 'math.sin(math.radians)',
-            'cosd': 'math.cos(math.radians)',
-            'tand': 'math.tan(math.radians)',
-
+            # 'sind': 'math.sin(math.radians)',
+            # 'cosd': 'math.cos(math.radians)',
+            # 'tand': 'math.tan(math.radians)',
+            
            
 
             'log': 'math.log10',  # Log base 10
