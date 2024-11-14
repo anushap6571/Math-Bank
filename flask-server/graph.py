@@ -6,6 +6,10 @@ from sympy.parsing.sympy_parser import parse_expr
 
 class Graph:
     def plot_equation(self, equation):
+
+         # Ensure equation supports exponentiation by replacing '^' with '**'
+        equation = equation.replace('^', '**')
+        
         x = symbols('x')
         equation = parse_expr(equation.replace('=', '-(') + ')')
 
@@ -47,4 +51,3 @@ class Graph:
 
         print(f"Graph saved at: {graph_path}")  # Debugging line
         return {"graph": graph_path}
-
