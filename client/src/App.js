@@ -6,6 +6,7 @@ import Graph from './components/graph';
 import SignUpPage from './components/signup';
 import LogInPage from './components/login';
 import Matrix from './components/matrix'
+import Notes from './components/notes'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 
@@ -31,7 +32,12 @@ function App() {
                     <Routes>
                         <Route path ="/sign-up" element = {<SignUpPage setIsLoggedIn = {setIsLoggedIn} setUsername={setUsername}/>}/>
                         <Route path ="/" element = {<LogInPage setIsLoggedIn = {setIsLoggedIn} setUsername={setUsername}/>}/>
-                        <Route path ="/calculator" element = {<Calculator/>}/>
+                        <Route path ="/calculator" element = {
+                            <>
+                                <Calculator />
+                                <Notes />
+                            </>
+                        } />
                     </Routes>
                     <Routes>
                         <Route path="/calculator/equation" element=
@@ -39,9 +45,14 @@ function App() {
                             <>
                                 <EquationSolver equation={equation} setEquation={setEquation} />
                                 <Graph equation={equation} setEquation={setEquation}/>
+                                <Notes />
                             </>
                         }/>
-                        <Route path="/calculator/matrix" element= { <><Matrix/></>
+                        <Route path="/calculator/matrix" element= { 
+                            <>
+                                <Notes />
+                                <Matrix/>
+                            </>
                         }/>
                     </Routes>
             </div>
