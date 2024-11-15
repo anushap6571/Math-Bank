@@ -5,6 +5,9 @@ def query_users():
     users = User.query.all()
     for user in users:          # prints all of the users in database
         print(f"ID: {user.id}, Username: {user.username}, Email: {user.email}, Password: {user.password}")
+        if user.note:
+            print(user.note)
+
 
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
-    notes = db.relationship('Note', backref='user', lazy=True)
+    note = {'note 1', 'note 2'}
 
 class Note(db.Model):
     id = db.Column(db.Integer, primary_key=True)

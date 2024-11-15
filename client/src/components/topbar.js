@@ -10,9 +10,13 @@ const TopBar = ({ isLoggedIn , username}) => {
             <div style={navbar}>
                 <div style={mathbank}>Math Bank</div>
                 <div style={buttonContainer}>
-                    <Link to="/calculator" style={linkStyle}>
+                    {isLoggedIn&&(
+                        
+                        <Link to="/calculator" style={linkStyle}>
                         <button style={buttonStyle}>Calculator</button>
-                    </Link>
+                        </Link>
+                        )}
+
                     {!isLoggedIn && (
                         <>
                             <Link to="/sign-up" style={linkStyle}>
