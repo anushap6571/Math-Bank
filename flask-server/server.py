@@ -75,14 +75,14 @@ history = HistorySection(user="user"); # for one user
 def calculate():
     data = request.get_json()
     expression = data.get('expression')
+    isDegreeMode = data.get('isDegreeMode')
     print(expression)
     print(f"calculate: expression = \' {expression} \'\n")
 
     try:
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
         if any(func in expression for func in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '|', '!', 'π', 'e']):
-            #print("is going to advanced math")
-            print("calculate: expression goes to adv math \n")
+            print("is going to advanced math")
             result = advanced_math.process(expression)
         else:
             result = basic_math.process(expression)

@@ -46,6 +46,8 @@ Potential Risks:
 
 # create virtual environment
 
+    note: replace <env-name> with any name
+
 mac
 
 ```

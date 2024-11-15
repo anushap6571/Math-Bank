@@ -3,12 +3,23 @@ import plotly.graph_objs as go
 import os
 from sympy import symbols
 from sympy.parsing.sympy_parser import parse_expr
+import re
 
 class Graph:
+    
+        
+
+
     def plot_equation(self, equation):
 
          # Ensure equation supports exponentiation by replacing '^' with '**'
         equation = equation.replace('^', '**')
+        
+        # Pattern to detect a number followed by a trig function or constants
+        pattern = r'(\d)([a-zA-Z\(π])'
+    
+        # Insert '*' between the number and the function/constant
+        equation = re.sub(pattern, r'\1*\2', equation)
         
         x = symbols('x')
         equation = parse_expr(equation.replace('=', '-(') + ')')
