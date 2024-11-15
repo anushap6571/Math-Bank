@@ -18,7 +18,7 @@ from datetime import datetime # to get current date and time
 from collections import defaultdict # helps with nested dict
 import uuid # for unique id generation
 
-class History_Section:
+class HistorySection:
     def __init__(self, user):
         self.user = user
 
