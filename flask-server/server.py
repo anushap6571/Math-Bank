@@ -67,7 +67,7 @@ advanced_math = AdvancedMath()
 equation_solver = EquationSolver()
 graph = Graph()
 
-# all logic for calculator page
+# all logic for calculator page routing
 @app.route('/calculator', methods=['POST'])
 def calculate():
     data = request.get_json()
