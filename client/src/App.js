@@ -50,8 +50,8 @@ function App() {
                         }/>
                         <Route path="/calculator/matrix" element= { 
                             <>
-                                <Notes />
                                 <Matrix/>
+                                <Notes />
                             </>
                         }/>
                     </Routes>

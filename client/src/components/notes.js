@@ -20,6 +20,7 @@ const Notes = () => {
 
     const handleAddNote = () => {
         if (note) {
+            console.log(note);
             setNotesList([note, ...notesList]); // Add new note at the beginning of the list
             setNote(''); // Clear input after adding
         }
