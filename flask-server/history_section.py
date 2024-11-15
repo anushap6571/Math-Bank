@@ -24,7 +24,7 @@ class HistorySection:
 
         # Until a database is implemented, a dictionary is to store a user's history
         # Entries are store by topic, then date/session.
-        self.history = defaultdict(lambda: defaultdict(list))
+        self.history = defaultdict(lambda: defaultdict(dict))
 
 
     # Add an entry to the user's history. Assign a unique ID to the entry.

@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from basic_math import BasicMath
@@ -70,6 +71,7 @@ graph = Graph()
 history = HistorySection(user="user"); # for one user
 
 
+
 # all logic for calculator page
 @app.route('/calculator', methods=['POST'])
 def calculate():
@@ -77,20 +79,49 @@ def calculate():
     expression = data.get('expression')
     isDegreeMode = data.get('isDegreeMode')
     print(expression)
-    print(f"calculate: expression = \' {expression} \'\n")
 
     try:
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
         if any(func in expression for func in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '|', '!', 'π', 'e']):
             print("is going to advanced math")
             result = advanced_math.process(expression)
+            history.add_entry(input=expression, output=result, topic="Advanced Math")
+            print(f"DEBUG STMT: {expression} = {result} added to history")
+            return jsonify({'result': result, 'history_entry': {
+                'input': expression,
+                'output': result,
+                'topic': "Advanced Math",
+                'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }})
         else:
             result = basic_math.process(expression)
-        return jsonify({'result': result})
+            history.add_entry(input=expression, output=result, topic="Basic Math")
+            print(f"DEBUG STMT: {expression} = {result} added to history")
+            return jsonify({'result': result, 'history_entry': {
+                'input': expression,
+                'output': result,
+                'topic': "Basic Math",
+                'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }})
+        #return jsonify({'result': result})
     except ZeroDivisionError:
-        return jsonify({'error': 'Cannot divide by zero'}), 400
+        history.add_entry(input=expression, output='Cannot divide by zero', topic="Error")
+        print(f"DEBUG STMT: {expression} = Error added to history")
+        return jsonify({'error': 'Cannot divide by zero', 'history_entry': {
+            'input': expression,
+            'output': 'Cannot divide by zero',
+            'topic': "Error",
+            'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }}, 400)
     except Exception as e:
-        return jsonify({'error': 'Invalid expression'}), 400
+        history.add_entry(input=expression, output='Invalid expression', topic="Error")
+        print(f"DEBUG STMT: {expression} = Error added to history")
+        return jsonify({'error': 'Invalid expression', 'history_entry': {
+            'input': expression,
+            'output': 'Invalid expression',
+            'topic': "Error",
+            'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }}, 400)
 
 
 
@@ -106,6 +137,8 @@ def equation():
     
     # Implement your equation solving logic here
     solutions = equation_solver.solve_equation(expression)  # Replace this with actual solving logic
+    history.add_entry(input=expression, output=solutions, topic="Equation Solving")
+    print(f"DEBUG STMT: {expression} = {solutions} added to history")
     return jsonify({'solutions': solutions})
 
 
