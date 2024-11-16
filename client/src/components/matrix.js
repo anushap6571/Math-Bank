@@ -183,6 +183,9 @@ const styles = {
     container: {
         textAlign: 'center',
         marginTop: '20px',
+        maxWidth: '1200px',  // Change this to set max width
+        width: '90%',        
+        margin: '0 auto', 
     },
     matrixContainer: {
         marginBottom: '30px',
@@ -233,5 +236,6 @@ const styles = {
         fontSize: '18px',
     },
 };
+
 
 export default Matrix;
