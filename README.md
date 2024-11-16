@@ -33,6 +33,15 @@ Scope:
 - Solve trigonometric functions
 - Add a “Notes” section which is saved between logins for common equations / rough work
 
+Potential Risks:
+
+- We don’t have experience designing a web-based application, and implementing trigonometric/matrix calculations through code.
+- We are unsure about implementing the graphing portion of the calculator.
+- We need to learn about adding a login/authentication and using a database to store the user’s history.
+- Securing user information in our database.
+- Saving past equations from the user for future reference.
+- Working to integrate front end and back end.
+
 # Get Started
 
 # create virtual environment
@@ -72,8 +81,74 @@ windows
 $ pip install Flask
 ```
 
+# cross-origin resource sharing
+
+mac and windows
+
+```
+$ pip install flask-cors
+```
+
+# for equation solving
+
+```
+$ pip install sympy
+```
+
+# for graphing feature
+
+```
+$ npm install react-plotly.js plotly.js
+```
+
+```
+$ pip install matplotlib numpy
+```
+
+```
+$ pip install plotly
+```
+
+# for matrix
+
+```
+$ npm install axios
+```
+
+# install router-dom under client
+
+```
+$ npm install react-router-dom
+```
+
+# install react-bootstrap
+
+```
+$ npm install react-bootstrap bootstrap
+```
+
+# install react-hook-form under client
+
+```
+$ npm install react-hook-form
+```
+
+# for user database
+
+```
+$ pip install flask-sqlalchemy
+```
+
 # to run
+
+under flask-server
 
 ```
 $ python3 <pathname to server.py>
+```
+
+under client
+
+```
+$ npm start
 ```
