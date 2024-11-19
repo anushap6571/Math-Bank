@@ -2,8 +2,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-
+import Notes from './notes'
 
 const Calculator = () => {
     const [expression, setExpression] = useState('');
@@ -169,6 +168,7 @@ const Calculator = () => {
     };
 
     return (
+
         <div style={{backgroundColor: '#E5E7EB',  minHeight: '100vh', minWidth: '100vh'}}>
         <div style={calcContainer}>
             <textarea
@@ -238,6 +238,7 @@ const Calculator = () => {
                 
             </div>
         </div>
+        <Notes/>
         </div>
     );
 };

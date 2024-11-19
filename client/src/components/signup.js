@@ -69,12 +69,16 @@ const SignUpPage=({setIsLoggedIn, setUsername})=>{
                     <Form.Label>Email: </Form.Label>
                     <Form.Control type ="text"                                  /* same format as above*/
                     placeholder="Enter your Email"
-                    {...register("email", {required:true, maxLength:30})}
+                    {...register("email", 
+                        {required:true, maxLength:30,
+                            pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/    
+                        })}
                     />
                 </Form.Group>
                 {errors.email && <span style ={{color:"red"}}>Email is required</span>}
                 <br></br>
                 {errors.email?.type === "maxLength" && <span style ={{color:"red"}}>Max email length is 30 characters</span>}
+                {errors.email?.type === "pattern" && <span style={{color:"red"}}>Invalid email format</span>}
                 <Form.Group>
                     <Form.Label>Password: </Form.Label>                 {/* same format as above */}
                     <Form.Control type ="password"                      /* <--- type is changed (password) to make the password*/
