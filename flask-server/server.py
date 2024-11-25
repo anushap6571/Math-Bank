@@ -84,7 +84,7 @@ def calculate():
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
         if any(func in expression for func in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '|', '!', 'π', 'e']):
             print("is going to advanced math")
-            result = advanced_math.process(expression)
+            result = advanced_math.process(expression, isDegreeMode)
             history.add_entry(input=expression, output=result, topic="Advanced Math")
             print(f"DEBUG STMT: {expression} = {result} added to history")
             return jsonify({'result': result, 'history_entry': {
