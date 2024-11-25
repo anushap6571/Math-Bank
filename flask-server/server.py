@@ -75,6 +75,7 @@ history = HistorySection(user="user"); # for one user
 # all logic for calculator page
 @app.route('/calculator', methods=['POST'])
 def calculate():
+
     data = request.get_json()
     expression = data.get('expression')
     isDegreeMode = data.get('isDegreeMode')
@@ -84,7 +85,8 @@ def calculate():
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
         if any(func in expression for func in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '|', '!', 'π', 'e']):
             print("is going to advanced math")
-            result = advanced_math.process(expression)
+            result = advanced_math.process(expression, isDegreeMode)
+            print("result is  {result}")
             history.add_entry(input=expression, output=result, topic="Advanced Math")
             print(f"DEBUG STMT: {expression} = {result} added to history")
             return jsonify({'result': result, 'history_entry': {
@@ -138,7 +140,19 @@ def equation():
     # Implement your equation solving logic here
     solutions = equation_solver.solve_equation(expression)  # Replace this with actual solving logic
     history.add_entry(input=expression, output=solutions, topic="Equation Solving")
+
     print(f"DEBUG STMT: {expression} = {solutions} added to history")
+    # Retrieve and print all the history after updating it
+    all_history = history.get_all_hist()
+    print("DEBUG STMT: Current History")
+    for topic, dates in all_history.items():
+        print(f"Topic: {topic}")
+        for date, entries in dates.items():
+            print(f"  Date: {date}")
+            for entry_id, entry in entries.items():
+                print(f"    ID: {entry_id}, Input: {entry['input']}, Output: {entry['output']}")
+
+    
     return jsonify({'solutions': solutions})
 
 
