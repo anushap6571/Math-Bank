@@ -154,3 +154,10 @@ under client
 ```
 $ npm start
 ```
+
+# Troubleshooting on Windows:
+If there are issues installing packages try: 
+
+```
+$ python -m pip install <package-name>
+```
