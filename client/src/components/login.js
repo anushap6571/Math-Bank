@@ -37,9 +37,10 @@ const LogInPage = ({setIsLoggedIn, setUsername}) => {
             if (logInData['Log In Successful']) {
                 alert('Log In Successful');
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('username', logInData.username)
+                localStorage.setItem('username', body.username)
+
                 setIsLoggedIn(true);
-                setUsername(logInData.username);
+                setUsername(body.username);
                 Navigate('/calculator')     // Move to calculator screen
             } else {
                 alert('Username or Password invalid');

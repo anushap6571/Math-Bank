@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import LogInPage from './login';
 
 const TopBar = ({ isLoggedIn, username, setIsLoggedIn, setUsername }) => {
     const navigate = useNavigate();
@@ -8,7 +9,7 @@ const TopBar = ({ isLoggedIn, username, setIsLoggedIn, setUsername }) => {
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('username');
         setIsLoggedIn(false);
-        setUsername('');
+        setUsername(localStorage.getItem('username'));
         navigate('/');
     };
 
@@ -43,8 +44,9 @@ const TopBar = ({ isLoggedIn, username, setIsLoggedIn, setUsername }) => {
                         </>
                     )}
                     {isLoggedIn && (
-                        <div>
-                            Welcome To MathBank, {username}
+                        <div style = {welcomeContainer}>
+                            Welcome To MathBank, 
+                            <br/>{username}
                         </div>
                     )}
                 </div>
@@ -108,4 +110,10 @@ const linkStyle = {
 
 buttonStyle[':hover'] = {
     backgroundColor: '#005fa3',
+};
+
+const welcomeContainer = {
+    textAlign: 'center',
+    fontSize: '1.76vh',
+    color: '#333'
 };

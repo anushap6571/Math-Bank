@@ -12,7 +12,6 @@ const SignUpPage=({setIsLoggedIn, setUsername})=>{
     const Navigate = useNavigate();
 
     const submitSignUp=(data)=>{
-            console.log(data)
 
             const body={
                 username:data.username,
@@ -34,12 +33,12 @@ const SignUpPage=({setIsLoggedIn, setUsername})=>{
                 return response.json();
             })
             .then(data=>{
-                console.log('Success', data);
+                console.log('Success', body);
                 alert('User created');
                 localStorage.setItem('isLoggedIn', 'true');
-                localStorage.setItem('username', data.username)
+                localStorage.setItem('username', body.username)
                 setIsLoggedIn(true);
-                setUsername(data.username);
+                setUsername(body.username);
                 Navigate('/calculator');
             })
             .catch((error) =>{

@@ -61,6 +61,26 @@ def signup():
         print(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/savenotes', methods=['POST'])
+def save_notes():
+    try:
+        data = request.get_json()  # Parse the incoming JSON data
+        if not data:
+            return jsonify({"message": "No data provided"}), 400  # Return a valid JSON response with status
+
+        # Assume user exists and is updating their notes
+        user = User.query.first()  # For simplicity, get the first user
+        if user:
+            user.note = data['notesList']
+            db.session.commit()
+            print('Users notes after commit: ', user.note)
+            return jsonify({"message": "Notes saved successfully"}), 200  # Properly formatted JSON
+        else:
+            return jsonify({"message": "User not found"}), 404  # Properly formatted JSON
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500  # Properly formatted JSON
+
 
 basic_math = BasicMath()
 advanced_math = AdvancedMath()

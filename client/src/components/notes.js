@@ -11,25 +11,74 @@ const Notes = () => {
     useEffect(() => {
         const storedNotes = JSON.parse(localStorage.getItem('mathNotes')) || [];
         setNotesList(storedNotes);
+        console.log(localStorage.getItem('mathNotes'));
     }, []);
 
     // Save notes to localStorage whenever notesList changes
     useEffect(() => {
         localStorage.setItem('mathNotes', JSON.stringify(notesList));
+    console.log(localStorage.getItem('mathNotes'));
     }, [notesList]);
 
     const handleAddNote = () => {
         if (note) {
-            console.log(note);
+            
             setNotesList([note, ...notesList]); // Add new note at the beginning of the list
             setNote(''); // Clear input after adding
-        }
+    }
     };
 
     const handleDeleteNote = (index) => {
         const updatedNotes = notesList.filter((_, i) => i !== index);
         setNotesList(updatedNotes); // Update state to remove deleted note
     };
+    
+    
+    // const handleSaveNotes = async () => {
+    //     try {
+    //         console.log("Inside of handleSaveNotes");
+    //         const response = await fetch('http://127.0.0.1:5000/savenotes', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ notes: notesList }),
+    //         });
+    //         if (response.ok) {
+    //             console.log('Notes saved successfully');
+    //         } else {
+    //             console.error('Failed to save notes');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error:', error);
+    //     }
+    // };
+    
+    const handleSaveNotes = () => {
+        console.log("inside save notes.");
+        console.log(notesList);
+        
+        fetch('http://127.0.0.1:5000/savenotes', {
+            method: 'POST',
+            headers: {
+                'Content-Type' : 'application/json'
+            },
+            body: JSON.stringify({notesList})
+        })
+        .then(Response => {
+            if (!Response.ok)
+            {
+                throw new Error('Network Response Bad.');
+            }
+            return Response.json();
+        })
+        .catch((error) => {
+            console.log("error from catch: ", error);
+            alert('Error from catch');
+        })
+        
+
+    }
 
     return (
         <div style={{ backgroundColor: '#F3F4F6', minHeight: '100vh', minWidth: '100vh' }}>
@@ -54,6 +103,7 @@ const Notes = () => {
                         </li>
                     ))}
                 </ul>
+                <button onClick={handleSaveNotes}> Save Notes </button>
             </div>
         </div>
     );
@@ -91,3 +141,4 @@ const notesListStyle = {
 
 
 export default Notes;
+
