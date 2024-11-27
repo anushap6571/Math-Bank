@@ -46,6 +46,8 @@ Potential Risks:
 
 # create virtual environment
 
+    note: replace <env-name> with any name
+
 mac
 
 ```
@@ -151,4 +153,11 @@ under client
 
 ```
 $ npm start
+```
+
+# Troubleshooting on Windows:
+If there are issues installing packages try: 
+
+```
+$ python -m pip install <package-name>
 ```

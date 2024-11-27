@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import History from './history'
 
 
 
@@ -13,6 +14,7 @@ const Calculator = () => {
     const [isHovering, setHoveredButton] = useState(null);
     const navigate = useNavigate();
     const [isDegreeMode, setIsDegreeMode] = useState(false); // Track mode (Degree/Radian)
+    const [history, setHistory] = useState({});  
 
     // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
@@ -60,6 +62,7 @@ const Calculator = () => {
                 label == '=' ? calculate :
                 label === 'Equation' ? handleEquationNavigation : 
                 label === 'Matrix' ? handleMatrixNavigation : 
+                label === 'Graph' ? handleEquationNavigation :
                 label === 'Deg' ? toggleMode :
                 label === 'Rad' ? toggleMode :
                 () => handleButtonClick(label)
@@ -125,11 +128,10 @@ const Calculator = () => {
     });
     
     const toggleMode = () => {
-
         setIsDegreeMode((prevMode) => !prevMode);
-        
 
     };
+
 
     const calculate = async () => {
         try {
@@ -139,7 +141,7 @@ const Calculator = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ expression }),
+                body: JSON.stringify({ expression, isDegreeMode }),
             });
 
             const data = await response.json();
@@ -147,6 +149,24 @@ const Calculator = () => {
                 const result = data.result;
                 setResult(result);
                 setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
+
+                const topic = 'topic';
+                const date = new Date().toLocaleString();
+                const entry = {
+                    id: Date.now().toString(),
+                    input: expression,
+                    output: result,
+                    topic,
+                    date,
+                };
+                setHistory((prev) => {
+                    const newHistory = { ...prev };
+                    if (!newHistory[topic]) newHistory[topic] = {};
+                    if (!newHistory[topic][date]) newHistory[topic][date] = {};
+                    newHistory[topic][date][entry.id] = entry;
+                    return newHistory;
+                });
+
                 setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
@@ -223,7 +243,7 @@ const Calculator = () => {
                 </div>
                 <div style = { buttonRowStyle }>
                     <Button label='log' style={mostLeftButtonStyle}/>
-                    <Button label='exp' style={buttonStyle}/>
+                    <Button label='%' style={buttonStyle}/>
                     <Button label='ln' style={buttonStyle}/>
                     <Button label='|x|' style={buttonStyle}/>
                     <Button label='=' style={buttonStyle}/>
@@ -238,11 +258,10 @@ const Calculator = () => {
                 
             </div>
         </div>
+        <History history={history} />
         </div>
     );
 };
-
-
 
 
 export default Calculator;
