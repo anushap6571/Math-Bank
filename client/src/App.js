@@ -6,6 +6,7 @@ import Graph from './components/graph';
 import SignUpPage from './components/signup';
 import LogInPage from './components/login';
 import Matrix from './components/matrix';
+import History from './components/history'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {

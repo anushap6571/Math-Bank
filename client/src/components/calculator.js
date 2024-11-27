@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import History from './history'
 import Notes from './notes'
 
 const Calculator = () => {
@@ -12,6 +13,7 @@ const Calculator = () => {
     const [isHovering, setHoveredButton] = useState(null);
     const navigate = useNavigate();
     const [isDegreeMode, setIsDegreeMode] = useState(false); // Track mode (Degree/Radian)
+    const [history, setHistory] = useState({});  
 
     // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
@@ -146,6 +148,24 @@ const Calculator = () => {
                 const result = data.result;
                 setResult(result);
                 setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
+
+                const topic = 'topic';
+                const date = new Date().toLocaleString();
+                const entry = {
+                    id: Date.now().toString(),
+                    input: expression,
+                    output: result,
+                    topic,
+                    date,
+                };
+                setHistory((prev) => {
+                    const newHistory = { ...prev };
+                    if (!newHistory[topic]) newHistory[topic] = {};
+                    if (!newHistory[topic][date]) newHistory[topic][date] = {};
+                    newHistory[topic][date][entry.id] = entry;
+                    return newHistory;
+                });
+
                 setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
@@ -239,6 +259,7 @@ const Calculator = () => {
             </div>
         </div>
         <Notes/>
+        <History history={history} />
         </div>
     );
 };
