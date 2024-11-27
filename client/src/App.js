@@ -36,7 +36,6 @@ function App() {
                             element={
                                 <>
                                     <EquationSolver equation={equation} setEquation={setEquation} />
-                                    <Graph equation={equation} setEquation={setEquation} />
                                 </>
                             }
                         />
