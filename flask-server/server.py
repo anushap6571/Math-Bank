@@ -84,6 +84,18 @@ def save_notes():
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
 
+@app.route('/getnotes/<username>', methods = ['GET'])
+def get_notes(username):
+    try:
+        user = User.query.filter_by(username=username).first()
+        if user:
+            notes = json.loads(user.notes) if user.notes else []
+            return jsonify({"notesList": notes}), 200
+        else:
+            return jsonify({"message": "User not found"}), 404
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 basic_math = BasicMath()
 advanced_math = AdvancedMath()
