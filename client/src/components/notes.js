@@ -70,6 +70,7 @@ const Notes = () => {
             {
                 throw new Error('Network Response Bad.');
             }
+            alert('Notes have been Saved!');
             return Response.json();
         })
         .catch((error) => {
