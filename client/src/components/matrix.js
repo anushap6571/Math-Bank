@@ -1,4 +1,4 @@
-// src/MatrixPage.js
+//Rohan - UI changes
 import React, { useState } from 'react';
 import axios from 'axios';
 
@@ -75,14 +75,14 @@ const Matrix = () => {
     };
 
     return (
-        <div>
+        <div style={styles.container}>
             <h1>Matrix Operations</h1>
             
             {/* Matrix A Input */}
-            <div>
+            <div style={styles.matrixContainer}>
                 <h2>Matrix A</h2>
                 {matrixA.map((row, rowIndex) => (
-                    <div key={rowIndex}>
+                    <div key={rowIndex} style={styles.row}>
                         {row.map((value, colIndex) => (
                             <input
                                 key={colIndex}
@@ -91,21 +91,24 @@ const Matrix = () => {
                                 onChange={(e) =>
                                     handleMatrixChange(matrixA, setMatrixA, rowIndex, colIndex, e.target.value)
                                 }
+                                style={styles.inputBox}
                             />
                         ))}
                     </div>
                 ))}
-                <button onClick={() => addRow(matrixA, setMatrixA)}>Add Row to A</button>
-                <button onClick={() => addColumn(matrixA, setMatrixA)}>Add Column to A</button>
-                <button onClick={() => deleteRow(matrixA, setMatrixA)}>Delete Row from A</button>
-                <button onClick={() => deleteColumn(matrixA, setMatrixA)}>Delete Column from A</button>
+                <div style={styles.buttonContainer}>
+                    <button style={styles.button} onClick={() => addRow(matrixA, setMatrixA)}>Add Row to A</button>
+                    <button style={styles.button} onClick={() => addColumn(matrixA, setMatrixA)}>Add Column to A</button>
+                    <button style={styles.button} onClick={() => deleteRow(matrixA, setMatrixA)}>Delete Row from A</button>
+                    <button style={styles.button} onClick={() => deleteColumn(matrixA, setMatrixA)}>Delete Column from A</button>
+                </div>
             </div>
 
             {/* Matrix B Input */}
-            <div>
+            <div style={styles.matrixContainer}>
                 <h2>Matrix B</h2>
                 {matrixB.map((row, rowIndex) => (
-                    <div key={rowIndex}>
+                    <div key={rowIndex} style={styles.row}>
                         {row.map((value, colIndex) => (
                             <input
                                 key={colIndex}
@@ -114,26 +117,29 @@ const Matrix = () => {
                                 onChange={(e) =>
                                     handleMatrixChange(matrixB, setMatrixB, rowIndex, colIndex, e.target.value)
                                 }
+                                style={styles.inputBox}
                             />
                         ))}
                     </div>
                 ))}
-                <button onClick={() => addRow(matrixB, setMatrixB)}>Add Row to B</button>
-                <button onClick={() => addColumn(matrixB, setMatrixB)}>Add Column to B</button>
-                <button onClick={() => deleteRow(matrixB, setMatrixB)}>Delete Row from B</button>
-                <button onClick={() => deleteColumn(matrixB, setMatrixB)}>Delete Column from B</button>
+                <div style={styles.buttonContainer}>
+                    <button style={styles.button} onClick={() => addRow(matrixB, setMatrixB)}>Add Row to B</button>
+                    <button style={styles.button} onClick={() => addColumn(matrixB, setMatrixB)}>Add Column to B</button>
+                    <button style={styles.button} onClick={() => deleteRow(matrixB, setMatrixB)}>Delete Row from B</button>
+                    <button style={styles.button} onClick={() => deleteColumn(matrixB, setMatrixB)}>Delete Column from B</button>
+                </div>
             </div>
 
             {/* Matrix Operations */}
-            <div>
-                <button onClick={multiplyMatrices}>Multiply Matrices</button>
-                <button onClick={() => calculateRREF(matrixA)}>RREF of Matrix A</button>
-                <button onClick={() => calculateDeterminant(matrixA)}>Determinant of Matrix A</button>
+            <div style={styles.operationContainer}>
+                <button style={styles.operationButton} onClick={multiplyMatrices}>Multiply Matrices</button>
+                <button style={styles.operationButton} onClick={() => calculateRREF(matrixA)}>RREF of Matrix A</button>
+                <button style={styles.operationButton} onClick={() => calculateDeterminant(matrixA)}>Determinant of Matrix A</button>
             </div>
 
             {/* Results */}
             {result && (
-                <div>
+                <div style={styles.resultContainer}>
                     <h2>Multiplication Result</h2>
                     {result.error ? (
                         <p>{result.error}</p>
@@ -146,7 +152,7 @@ const Matrix = () => {
             )}
 
             {rrefResult && (
-                <div>
+                <div style={styles.resultContainer}>
                     <h2>RREF Result</h2>
                     {rrefResult.error ? (
                         <p>{rrefResult.error}</p>
@@ -159,7 +165,7 @@ const Matrix = () => {
             )}
 
             {detResult && (
-                <div>
+                <div style={styles.resultContainer}>
                     <h2>Determinant Result</h2>
                     {detResult.error ? (
                         <p>{detResult.error}</p>
@@ -171,5 +177,65 @@ const Matrix = () => {
         </div>
     );
 };
+
+// Styles for the page
+const styles = {
+    container: {
+        textAlign: 'center',
+        marginTop: '20px',
+        maxWidth: '1200px',  // Change this to set max width
+        width: '90%',        
+        margin: '0 auto', 
+    },
+    matrixContainer: {
+        marginBottom: '30px',
+        display: 'inline-block',
+        textAlign: 'left',
+        padding: '20px',
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        margin: '10px',
+    },
+    row: {
+        marginBottom: '10px',
+    },
+    inputBox: {
+        width: '50px',
+        height: '30px',
+        margin: '5px',
+        textAlign: 'center',
+        borderRadius: '5px',
+        border: '1px solid #ccc',
+    },
+    buttonContainer: {
+        marginTop: '10px',
+    },
+    button: {
+        padding: '5px 15px',
+        margin: '5px',
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    operationContainer: {
+        marginTop: '30px',
+    },
+    operationButton: {
+        padding: '10px 20px',
+        margin: '5px',
+        backgroundColor: '#007BFF',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    resultContainer: {
+        marginTop: '20px',
+        fontSize: '18px',
+    },
+};
+
 
 export default Matrix;

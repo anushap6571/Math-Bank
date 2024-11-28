@@ -34,25 +34,6 @@ const Notes = () => {
     };
     
     
-    // const handleSaveNotes = async () => {
-    //     try {
-    //         console.log("Inside of handleSaveNotes");
-    //         const response = await fetch('http://127.0.0.1:5000/savenotes', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({ notes: notesList }),
-    //         });
-    //         if (response.ok) {
-    //             console.log('Notes saved successfully');
-    //         } else {
-    //             console.error('Failed to save notes');
-    //         }
-    //     } catch (error) {
-    //         console.error('Error:', error);
-    //     }
-    // };
     
     const handleSaveNotes = () => {
         console.log("inside save notes.");
