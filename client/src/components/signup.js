@@ -1,46 +1,53 @@
 // // Diego Jimenez, DAJ220000, Sign Up File
 
-import React from 'react';
-import { Form, Button } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+import React,{useState} from 'react'
+import {Form, Button} from 'react-bootstrap'
+import {Link} from 'react-router-dom'
+import {useForm} from 'react-hook-form'
+import { useNavigate } from 'react-router-dom';
 
-const SignUpPage = () => {
-    const { register, reset, handleSubmit, formState: { errors } } = useForm();
+const SignUpPage=({setIsLoggedIn, setUsername})=>{
 
-    const submitSignUp = (data) => {
-        console.log(data);
+    const {register, reset, handleSubmit, formState:{errors}} = useForm();
+    const Navigate = useNavigate();
 
-        const body = {
-            username: data.username,
-            email: data.email,
-            password: data.password,
-        };
+    const submitSignUp=(data)=>{
 
-        // Making a POST request to sign up the user
-        fetch('http://127.0.0.1:5000/sign-up', { // Local server
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json', // Setting headers for JSON
-            },
-            body: JSON.stringify(data), // Sending data in JSON format
-        })
-            .then((response) => {
-                if (!response.ok) {
-                    throw new Error('Network response bad.'); // Handling non-200 responses
+            const body={
+                username:data.username,
+                email:data.email,
+                password:data.password
+            }
+           
+            fetch('http://127.0.0.1:5000/sign-up', {  // Local server
+                method:'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => {
+                if(!response.ok){
+                    throw new Error('Network response bad.')
                 }
                 return response.json(); // Parsing JSON response
             })
-            .then((data) => {
-                console.log('Success', data); // Success message
-                alert('User created'); // Alert the user
+            .then(data=>{
+                console.log('Success', body);
+                alert('User created');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', body.username)
+                setIsLoggedIn(true);
+                setUsername(body.username);
+                Navigate('/calculator');
             })
-            .catch((error) => {
-                console.log('Error from catch \n', error); // Logging errors
-            });
-
-        reset(); // Resetting the form after submission
-    };
+            .catch((error) =>{
+                console.log('Error from catch \n', error);
+                alert('This Username already exists in Math Bank')
+            })
+           
+            reset()
+        }
 
     return (
         <div

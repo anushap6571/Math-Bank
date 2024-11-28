@@ -1,14 +1,22 @@
 // // Diego Jimenez, DAJ220000, Log In File
 
 import React from 'react';
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import {Form, Button} from 'react-bootstrap';
+import {Link} from 'react-router-dom';
+import {useForm} from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
-const LogInPage = () => {
-    const { register, reset, handleSubmit, formState: { errors } } = useForm();
-
+const LogInPage = ({setIsLoggedIn, setUsername}) => {
+    const {register, reset, handleSubmit, formState:{errors}} = useForm();
+    const Navigate = useNavigate();
+    
     const submitLogIn = (logInData) => {
         console.log(logInData);
+
+        const body = {
+            username: logInData.username,
+            password: logInData.password
+        }
 
         fetch('http://127.0.0.1:5000/logInReq', {
             method: 'POST',
@@ -17,24 +25,31 @@ const LogInPage = () => {
             },
             body: JSON.stringify(logInData),
         })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response bad.');
-                }
-                return response.json();
-            })
-            .then(logInData => {
-                console.log('Success', logInData);
-                if (logInData['Log In Successful']) {
-                    alert('Log In Successful');
-                } else {
-                    alert('Username or Password invalid');
-                }
-            })
-            .catch((error) => {
-                console.log('Error from catch \n', error);
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response bad.');
+            }
+            return response.json();
+        })
+        .then(logInData => {
+            console.log('Success', logInData);
+
+            if (logInData['Log In Successful']) {
+                alert('Log In Successful');
+                localStorage.setItem('isLoggedIn', 'true');
+                localStorage.setItem('username', body.username)
+
+                setIsLoggedIn(true);
+                setUsername(body.username);
+                Navigate('/calculator')     // Move to calculator screen
+            } else {
                 alert('Username or Password invalid');
-            });
+            }
+        })
+        .catch((error) => {
+            console.log('Error from catch \n', error);
+            alert('Username or Password invalid');
+        });
 
         reset();
     };

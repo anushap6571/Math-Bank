@@ -9,6 +9,7 @@ from matrix import multiply_matrices, rref, determinant
 from flask_sqlalchemy import SQLAlchemy
 from user import db, User
 from history_section import HistorySection
+import json
 
 import os
 
@@ -17,9 +18,7 @@ import os
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) 
 
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
-
 
 db.init_app(app)
 
@@ -62,6 +61,28 @@ def signup():
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
+
+@app.route('/savenotes', methods=['POST'])
+def save_notes():
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"message": "No data provided"}), 400
+
+        currentUser = data['tempUsername']
+        print("current user: ", currentUser)
+
+        user = User.query.filter_by(username=currentUser).first()  # For simplicity, get the first user
+        if user:
+            user.notes = json.dumps(data['notesList'])  # Save notes as a JSON string
+            db.session.commit()
+            print("users notes after commit: ", user.notes)
+            return jsonify({"message": "Notes saved successfully"}), 200
+        else:
+            return jsonify({"message": "User not found"}), 404
+    except Exception as e:
+        print(f"Error: {e}")
+        return jsonify({"error": str(e)}), 500
 
 
 basic_math = BasicMath()
