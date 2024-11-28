@@ -36,6 +36,7 @@ const Notes = () => {
     
     
     const handleSaveNotes = () => {
+        const tempUsername = localStorage.getItem('username');
         console.log("inside save notes.");
         console.log(notesList);
         
@@ -44,7 +45,7 @@ const Notes = () => {
             headers: {
                 'Content-Type' : 'application/json'
             },
-            body: JSON.stringify({notesList})
+            body: JSON.stringify({notesList, tempUsername})
         })
         .then(Response => {
             if (!Response.ok)

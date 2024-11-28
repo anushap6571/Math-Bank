@@ -7,8 +7,8 @@ def query_users():
     users = User.query.all()
     for user in users:  # Prints all of the users in the database
         print(f"ID: {user.id}, Username: {user.username}, Email: {user.email}, Password: {user.password}")
-        if user.note:
-            print(user.note)
+        if user.notes:
+            print(user.notes)
 
 def delete_user_by_username(username):
     user = User.query.filter_by(username=username).first()
