@@ -145,35 +145,16 @@ const Calculator = () => {
             });
 
             const data = await response.json();
-            if (response.ok) {
+            if (response.ok && data.result) {
                 const result = data.result;
                 setResult(result);
                 setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
-
-                const topic = 'topic';
-                const date = new Date().toLocaleString();
-                const entry = {
-                    id: Date.now().toString(),
-                    input: expression,
-                    output: result,
-                    topic,
-                    date,
-                };
-                setHistory((prev) => {
-                    const newHistory = { ...prev };
-                    if (!newHistory[topic]) newHistory[topic] = {};
-                    if (!newHistory[topic][date]) newHistory[topic][date] = {};
-                    newHistory[topic][date][entry.id] = entry;
-                    return newHistory;
-                });
-
                 setExpression('');  // clear math expression after calculation
                 setError('');
             } else {
                 setError(data.error);
-                setTextbox((prev) => (prev + '\n' + data.error + '\n'));
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + data.error + '\n'); 
                 setResult(null);
-
             }
         } catch (err) {
             setError('Error communicating with server.');
