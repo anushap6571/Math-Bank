@@ -1,6 +1,7 @@
 //Rohan - UI changes
 import React, { useState } from 'react';
 import axios from 'axios';
+import Notes from './notes'
 
 const Matrix = () => {
     // Initialize matrices as 2x2 matrices filled with zeros
@@ -175,6 +176,7 @@ const Matrix = () => {
                     </div>
                 )}
             </div>
+            <Notes />
         </div>
     );
 };
@@ -185,8 +187,8 @@ const styles = {
         textAlign: 'center',
         marginTop: '20px',
         maxWidth: '1200px',  // Change this to set max width
-        width: '90%',        
-        margin: '0 auto', 
+        width: '90%',
+        margin: '0 auto',
     },
     matrixContainer: {
         marginBottom: '30px',

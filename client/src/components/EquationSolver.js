@@ -3,6 +3,7 @@
 
 import React, { useState } from 'react';
 import Graph from './graph'
+import Notes from './notes'
 
 const EquationSolver = ({ equation, setEquation }) => {
     const [solutions, setSolutions] = useState(null);
@@ -38,35 +39,40 @@ const EquationSolver = ({ equation, setEquation }) => {
     };
 
     return (
-        <div style={styles.container}>
-            <div style={styles.card}>
-                <h2 style={styles.title}>Equation Solver</h2>
-                <input
-                    type="text"
-                    value={equation}
-                    onChange={handleInputChange}
-                    placeholder="Enter equation (e.g., x + 3 = 9)"
-                    style={styles.input}
-                />
-                <button
-                    onClick={solveEquation}
-                    style={styles.button}
-                    onMouseEnter={(e) => (e.target.style.backgroundColor = styles.buttonHover.backgroundColor)}
-                    onMouseLeave={(e) => (e.target.style.backgroundColor = styles.button.backgroundColor)}
-                >
-                    Solve
-                </button>
+        <div>
+            <Notes />
+            <div style={styles.container}>
+                <div style={styles.card}>
+                    <h2 style={styles.title}>Equation Solver</h2>
+                    <input
+                        type="text"
+                        value={equation}
+                        onChange={handleInputChange}
+                        placeholder="Enter equation (e.g., x + 3 = 9)"
+                        style={styles.input}
+                    />
+                    <button
+                        onClick={solveEquation}
+                        style={styles.button}
+                        onMouseEnter={(e) => (e.target.style.backgroundColor = styles.buttonHover.backgroundColor)}
+                        onMouseLeave={(e) => (e.target.style.backgroundColor = styles.button.backgroundColor)}
+                    >
+                        Solve
+                    </button>
 
-                {solutions && (
-                    <div style={styles.solutionsContainer}>
-                        <h3 style={styles.solutionsTitle}>Solution:</h3>
-                        <p style={styles.solution}>{solutions.join(', ')}</p>
-                    </div>
-                )}
+                    {solutions && (
+                        <div style={styles.solutionsContainer}>
+                            <h3 style={styles.solutionsTitle}>Solution:</h3>
+                            <p style={styles.solution}>{solutions.join(', ')}</p>
+                        </div>
+                    )}
 
-                {error && <p style={styles.error}>{error}</p>}
+                    {error && <p style={styles.error}>{error}</p>}
+                </div>
+                <Graph equation={equation} setEquation={setEquation} />
+
             </div>
-            <Graph equation={equation} setEquation={setEquation} />
+
         </div>
     );
 };
@@ -86,10 +92,10 @@ const styles = {
     },
     card: {
         backgroundColor: '#fff',
-        borderRadius: '15px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
         padding: '30px',
-        maxWidth: '800px',
+        maxWidth: '700px',
         width: '100%',
         textAlign: 'center',
     },
@@ -109,7 +115,7 @@ const styles = {
     },
     button: {
         padding: '12px 24px',
-        backgroundColor: '#007BFF',
+        backgroundColor: '#0084D1',
         color: '#fff',
         border: 'none',
         borderRadius: '8px',
