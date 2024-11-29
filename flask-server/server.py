@@ -11,6 +11,8 @@ from user import db, User
 from history_section import HistorySection
 
 import os
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 # math bank controller
 
@@ -71,8 +73,35 @@ graph = Graph()
 history = HistorySection(user="user"); # for one user
 
 
+@app.route('/history', methods=['GET'])
+def get_history():
+    try:
+        # Log the request to the console
+        app.logger.info("Fetching history")
+        
+        history_entries = history.get_all_hist()  # Retrieve history entries
+        
+        app.logger.info(f"Retrieved {len(history_entries)} entries")
+        
+        # Format the history data to send to the client
+        history_data = []
+        for entry in history_entries:
+            history_data.append({
+                'input': entry['input'],
+                'output': entry['output'],
+                'topic': entry['topic'],
+                'date': entry['date']
+            })
+        
+        return jsonify({'history': history_data}), 200
 
-# all logic for calculator page
+    except Exception as e:
+        app.logger.error(f"Error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+
+
+# all logic for calculator page routing
 @app.route('/calculator', methods=['POST'])
 def calculate():
 
@@ -87,8 +116,11 @@ def calculate():
             print("is going to advanced math")
             result = advanced_math.process(expression, isDegreeMode)
             print("result is  {result}")
+
             history.add_entry(input=expression, output=result, topic="Advanced Math")
             print(f"DEBUG STMT: {expression} = {result} added to history")
+            print("\nCurrent history:")
+            history.print_all_hist()
             return jsonify({'result': result, 'history_entry': {
                 'input': expression,
                 'output': result,
@@ -97,15 +129,19 @@ def calculate():
             }})
         else:
             result = basic_math.process(expression)
+           
             history.add_entry(input=expression, output=result, topic="Basic Math")
             print(f"DEBUG STMT: {expression} = {result} added to history")
+            print("\nCurrent history:")
+            history.print_all_entries()
+
             return jsonify({'result': result, 'history_entry': {
                 'input': expression,
                 'output': result,
                 'topic': "Basic Math",
                 'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             }})
-        #return jsonify({'result': result})
+        
     except ZeroDivisionError:
         history.add_entry(input=expression, output='Cannot divide by zero', topic="Error")
         print(f"DEBUG STMT: {expression} = Error added to history")
@@ -125,6 +161,7 @@ def calculate():
             'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }}, 400)
 
+    
 
 
 
@@ -140,18 +177,6 @@ def equation():
     # Implement your equation solving logic here
     solutions = equation_solver.solve_equation(expression)  # Replace this with actual solving logic
     history.add_entry(input=expression, output=solutions, topic="Equation Solving")
-
-    print(f"DEBUG STMT: {expression} = {solutions} added to history")
-    # Retrieve and print all the history after updating it
-    all_history = history.get_all_hist()
-    print("DEBUG STMT: Current History")
-    for topic, dates in all_history.items():
-        print(f"Topic: {topic}")
-        for date, entries in dates.items():
-            print(f"  Date: {date}")
-            for entry_id, entry in entries.items():
-                print(f"    ID: {entry_id}, Input: {entry['input']}, Output: {entry['output']}")
-
     
     return jsonify({'solutions': solutions})
 
@@ -205,5 +230,3 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
     app.run(debug=True)
-
-

@@ -37,7 +37,7 @@ class AdvancedMath:
     
 
 
-
+    # Anusha Patel- degrees and radians switch
     def replace_to_degrees(self, expression):
         print("in the function to replace")
 
@@ -48,9 +48,6 @@ class AdvancedMath:
 
         print("after replacing to degrees: " + expression)
         return expression
-
-
-
 
 
 

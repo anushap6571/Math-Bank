@@ -5,11 +5,9 @@ from sympy import symbols
 from sympy.parsing.sympy_parser import parse_expr
 import re
 
+# Anusha Patel- graphing feautures 
 class Graph:
     
-        
-
-
     def plot_equation(self, equation):
 
          # Ensure equation supports exponentiation by replacing '^' with '**'
