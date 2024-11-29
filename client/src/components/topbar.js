@@ -28,7 +28,7 @@ const TopBar = ({ isLoggedIn, username, setIsLoggedIn, setUsername }) => {
                                 <button style={buttonStyle}>Calculator</button>
                             </Link>
                             <button style={buttonStyle} onClick={handleLogout}>
-                                LogOut
+                                Log out
                             </button>
                         </>
                     )}
@@ -44,9 +44,9 @@ const TopBar = ({ isLoggedIn, username, setIsLoggedIn, setUsername }) => {
                         </>
                     )}
                     {isLoggedIn && (
-                        <div style = {welcomeContainer}>
-                            Welcome To MathBank, 
-                            <br/>{username}
+                        <div style={welcomeContainer}>
+                            Welcome To Math Bank,
+                            <br />{username}
                         </div>
                     )}
                 </div>
