@@ -28,6 +28,25 @@ const Notes = () => {
         setNotesList(updatedNotes);
     };
 
+    
+    useEffect(() =>{
+        const fetchNotes = async () =>{ 
+            const tempUsername = localStorage.getItem('username');
+            console.log('currently inside of fetchNotes in notes.js.');
+            try{
+                const response = await fetch(`http://127.0.0.1:5000/getnotes/${tempUsername}`)
+                if(!response.ok){
+                    throw new Error('Failed to fetch notes');
+                }
+                const data = await response.json();
+                setNotesList(data.notesList || []);
+            } catch (error){
+                console.log('Error from catch: ', error);
+            }
+        };
+        fetchNotes();
+    }, []);
+
     const handleSaveNotes = () => {
         const tempUsername = localStorage.getItem('username');
         fetch('http://127.0.0.1:5000/savenotes', {
