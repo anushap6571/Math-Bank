@@ -1,6 +1,7 @@
 //Rohan - UI changes
 import React, { useState } from 'react';
 import axios from 'axios';
+import Notes from './notes'
 
 const Matrix = () => {
     // Initialize matrices as 2x2 matrices filled with zeros
@@ -175,9 +176,70 @@ const Matrix = () => {
                     </div>
                 )}
             </div>
+            <Notes />
         </div>
     );
 };
+
+// Styles for the page
+const styles = {
+    container: {
+        textAlign: 'center',
+        marginTop: '20px',
+        maxWidth: '1200px',  // Change this to set max width
+        width: '90%',
+        margin: '0 auto',
+    },
+    matrixContainer: {
+        marginBottom: '30px',
+        display: 'inline-block',
+        textAlign: 'left',
+        padding: '20px',
+        border: '1px solid #ccc',
+        borderRadius: '8px',
+        margin: '10px',
+    },
+    row: {
+        marginBottom: '10px',
+    },
+    inputBox: {
+        width: '50px',
+        height: '30px',
+        margin: '5px',
+        textAlign: 'center',
+        borderRadius: '5px',
+        border: '1px solid #ccc',
+    },
+    buttonContainer: {
+        marginTop: '10px',
+    },
+    button: {
+        padding: '5px 15px',
+        margin: '5px',
+        backgroundColor: '#4CAF50',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    operationContainer: {
+        marginTop: '30px',
+    },
+    operationButton: {
+        padding: '10px 20px',
+        margin: '5px',
+        backgroundColor: '#007BFF',
+        color: 'white',
+        border: 'none',
+        borderRadius: '5px',
+        cursor: 'pointer',
+    },
+    resultContainer: {
+        marginTop: '20px',
+        fontSize: '18px',
+    },
+};
+
 
 export default Matrix;
 

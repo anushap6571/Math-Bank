@@ -60,20 +60,25 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        minHeight: '100vh',
+        //minHeight: '100vh',
         backgroundColor: '#f5f7fa',
-        padding: '20px',
+        //padding: '20px',
         fontFamily: '"Arial", sans-serif',
+        position: 'absolute',
+        top: '50%',
+
+
     },
     card: {
         marginTop: '80px', // Adjust this value to position below the top bar
         backgroundColor: '#fff',
-        borderRadius: '15px',
-        boxShadow: '0 4px 10px rgba(0, 0, 0, 0.1)',
+
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
         padding: '30px',
         maxWidth: '800px',
         width: '100%',
         textAlign: 'center',
+
     },
     title: {
         marginBottom: '20px',
@@ -83,7 +88,7 @@ const styles = {
     },
     button: {
         padding: '12px 24px',
-        backgroundColor: '#007BFF',
+        backgroundColor: '#0084D1',
         color: '#fff',
         border: 'none',
         borderRadius: '8px',
