@@ -23,5 +23,8 @@ class EquationSolver:
         # Create the equation and solve it
         eq = Eq(left_expr, right_expr)
         solutions = solve(eq, x)
+        rounded_solutions = [str(round(sol.evalf(), 2)) for sol in solutions]  # Adjust rounding precision as needed
         
-        return [str(sol.evalf()) for sol in solutions]  # Convert solutions to string format
+        return rounded_solutions
+        
+       

@@ -99,8 +99,8 @@ const EquationSolver = ({ equation, setEquation }) => {
                 </div>
                 <Graph equation={equation} setEquation={setEquation} />
                 <div style={{ marginTop: '20px' }}>
-                <h2>Calculation History</h2>
-                <History refresh={refresh} />
+                    <h2>Calculation History</h2>
+                    <History refresh={refresh} />
                 </div>
             </div>
 
