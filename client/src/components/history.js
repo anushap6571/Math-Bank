@@ -82,7 +82,7 @@ const styles = {
       backgroundColor: 'white',
       border: '1px solid lightgray',
       height: '82vh',
-      width: '24vw',
+      width: '22vw',
       padding: '3vh',
       boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
       overflowY: 'scroll',

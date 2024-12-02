@@ -77,8 +77,8 @@ class HistorySection:
                     return entries[entry_id] # entry found
         return None # entry not found
 
+    # This will flatten the history and return a list of all entries
     def get_all_hist(self):
-        # This will flatten the history and return a list of all entries
         hist = []
     
         for topic, dates in self.history.items():

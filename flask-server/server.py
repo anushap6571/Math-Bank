@@ -115,13 +115,13 @@ graph = Graph()
 @app.route('/history', methods=['GET'])
 def get_history():
     try:
-        app.logger.info("Fetching history")
+        #app.logger.info("Fetching history")
         
         history_entries = history.get_all_hist()  # Retrieve history entries
         if not history_entries:
             return jsonify({'history': []}), 200  # Return an empty list if no history
 
-        app.logger.info(f"Retrieved {len(history_entries)} entries")
+        #app.logger.info(f"Retrieved {len(history_entries)} entries")
         
         # Format the history data to send to the client
         history_data = [{'input': entry['input'], 'output': entry['output'], 'topic': entry['topic'], 'date': entry['date']} for entry in history_entries]
@@ -154,7 +154,7 @@ def calculate():
     try:
         # (Rohan) - In code below adding these 2 lines should link advanced_math.py but not adding right now since untested
         if any(func in expression for func in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '|', '!', 'π', 'e']):
-            print("is going to advanced math")
+            #print("is going to advanced math")
             result = advanced_math.process(expression, isDegreeMode)
             history_entry = add_history_entry(expression, result, "Advanced Math")
         else:
@@ -162,19 +162,17 @@ def calculate():
             history_entry = add_history_entry(expression, result, "Basic Math")
     
         
-        print(f"DEBUG STMT: {expression} = {result} added to history")
-        print("\nCurrent history:")
-        history.print_all_entries()
+        print(f"\nDEBUG STMT: {expression} = {result} added to history.\n")
+        #print("\nCurrent history:")
+        #history.print_all_entries()
     
         return jsonify({'result': result, 'history_entry': history_entry})
         
     except ZeroDivisionError:
         history_entry = add_history_entry(expression, 'Cannot divide by zero', "Error")
-        print(f"DEBUG STMT: {expression} = Error added to history")
         return jsonify({'error': 'Cannot divide by zero', 'history_entry': history_entry}), 400
     except Exception as e:
         history_entry = add_history_entry(expression, 'Invalid expression', "Error")
-        print(f"DEBUG STMT: {expression} = Error added to history")
         return jsonify({'error': 'Invalid expression', 'history_entry': history_entry}), 400
 
     
