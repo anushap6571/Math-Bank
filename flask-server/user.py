@@ -15,7 +15,6 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     notes = db.Column(db.Text, default='[]')  # Store notes as a JSON string
 
-    history_entries = db.relationship('History', back_populates="user", cascade="all, delete-orphan")
 
 if __name__ == '__main__':
     db.create_all()
