@@ -10,41 +10,28 @@ const EquationSolver = ({ equation, setEquation }) => {
     const [solutions, setSolutions] = useState(null);
     const [error, setError] = useState('');
     const [history, setHistory] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     const handleInputChange = (e) => {
         setEquation(e.target.value);
     };
 
     const updateHistory = async (expression, result, error = '') => {
-        const newEntry = {
-            expression,
-            result: result || error,
-            date: new Date().toLocaleString(),
-        };
-
         try {
-            // Add a new entry to the backend
-            await fetch('http://127.0.0.1:5000/history', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newEntry),
-            });
+            const newEntry = { expression, result: result || error, date: new Date().toLocaleString() };
+            setHistory((prevHistory) => [newEntry, ...prevHistory]); // Update locally
 
-            // Fetch updated history from the backend
-            const response = await fetch('http://127.0.0.1:5000/history', {
-                method: 'GET',
-            });
+            // Trigger a refresh
+            setRefresh((prev) => !prev);
 
-            const data = await response.json();
-            if (response.ok && data.history) {
-                setHistory(data.history);  // Update history with fetched data
-            } else {
-                console.error('Failed to fetch history:', data.error);
+            // Fetch history from the server
+            const response = await fetch('http://127.0.0.1:5000/history', { method: 'GET' });
+            if (response.ok) {
+                const data = await response.json();
+                setHistory(data.history || []); // Sync with the server
             }
         } catch (err) {
-            console.error('Error updating history:', err);
+            console.error("Error updating history:", err);
         }
     };
 
@@ -63,22 +50,21 @@ const EquationSolver = ({ equation, setEquation }) => {
             if (response.ok) {
                 setSolutions(data.solutions); // Ensure the backend returns a `solutions` array
                 setError('');
-                updateHistory(equation, data.solutions.join(', '));
+
+                await updateHistory();
             } else {
                 setError(data.error || 'Unknown error occurred.');
                 setSolutions(null);
-                updateHistory(equation, null, data.error);
+
+                await updateHistory();
             }
         } catch (err) {
             setError('Error communicating with server.');
             setSolutions(null);
-            updateHistory(equation, null, 'Error communicating with server.');
+
+            await updateHistory();
         }
     };
-
-    useEffect(() => {
-        updateHistory();
-    }, []);
 
     return (
         <div>
@@ -114,7 +100,7 @@ const EquationSolver = ({ equation, setEquation }) => {
                 <Graph equation={equation} setEquation={setEquation} />
                 <div style={{ marginTop: '20px' }}>
                 <h2>Calculation History</h2>
-                <History />
+                <History refresh={refresh} />
                 </div>
             </div>
 

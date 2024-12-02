@@ -142,8 +142,6 @@ def add_history_entry(input_expr, output, topic):
         'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     }
 
-
-
 # all logic for calculator page routing
 @app.route('/calculator', methods=['POST'])
 def calculate():
