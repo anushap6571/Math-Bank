@@ -53,9 +53,13 @@ const Notes = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ notesList, tempUsername }),
         })
-        .then((response) => {
-            if (!response.ok) throw new Error('Network error');
-            return response.json();
+        .then(Response => {
+            if (!Response.ok)
+            {
+                throw new Error('Network Response Bad.');
+            }
+            alert('Notes have been Saved!');
+            return Response.json();
         })
         .catch((error) => {
             console.error('Save notes error:', error);
