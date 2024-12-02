@@ -54,13 +54,24 @@ const History = ({ refresh }) => {
           </div>
           {groupedHistory[topic].map((entry, index) => (
             <div key={index} style={styles.entry}>
-              <span style={styles.inputOutput}>{entry.input} = {(entry.output)}</span>
+
+              <span style={styles.inputOutput}>
+                {entry.input} = {formatSolutions(entry.output)}
+              </span>
             </div>
           ))}
         </div>
       ))}
     </div>
   );
+};
+
+// Utility function to format solutions with spaces
+const formatSolutions = (solutions) => {
+  if (Array.isArray(solutions)) {
+    return solutions.join(', '); // Adds spacing or use a separator like ' | '
+  }
+  return solutions; // In case of a single solution
 };
 
 // Function that formats the date string.
