@@ -1,57 +1,40 @@
+// Alex Bowman - AAB210003
+// History Frontend
 import React, { useEffect, useState } from 'react';
 
 const History = () => {
-    const [history, setHistory] = useState([]);  // Initialize as an array
-    const [error, setError] = useState(null);
+  const [history, setHistory] = useState([]); // Ensure it's an array
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        async function fetchHistory() {
-            try {
-                const response = await fetch('http://localhost:5000/history', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
+  useEffect(() => {
+      async function fetchHistory() {
+          try {
+              const response = await fetch('http://localhost:5000/history');
+              if (response.ok) {
+                  const data = await response.json();
+                  console.log("Fetched history:", data);
+                  const historyData = Array.isArray(data.history) ? data.history : [];
+                  setHistory(historyData);
+              } else {
+                  setError('Failed to fetch history');
+              }
+          } catch (err) {
+            console.error("Error fetching history:", err); // Log error
+            setError(err.message || 'Unknown error');
+          }
+      }
+      fetchHistory();
+  }, []); 
 
-                if (response.ok) {
-                    const data = await response.json();
-                    console.log('Fetched history data:', data);
-
-                    // Ensure history is an array, fallback to empty array if not
-                    const historyData = Array.isArray(data.history) ? data.history : [];
-                    
-                    // Sort history by topic and then date
-                    historyData.sort((a, b) => {
-                        // First, compare by topic
-                        if (a.topic !== b.topic) {
-                            return a.topic.localeCompare(b.topic);  // Ascending order by topic
-                        }
-                        // If topics are the same, compare by date
-                        return new Date(a.date) - new Date(b.date);  // Ascending order by date
-                    });
-
-                    setHistory(historyData);  // Set the sorted history
-                } else {
-                    setError('Failed to fetch history');
-                }
-            } catch (error) {
-                console.error('Error fetching history:', error);
-                setError('Error: ' + error.message);
-            }
-        }
-        fetchHistory();
-    }, []);
-
-    // Error display
-    if (error) {
-        return (
-            <div style={styles.historyPanel}>
-                <h2 style={styles.title}>History</h2>
-                <p style={styles.noHistoryText}>{error}</p>
-            </div>
-        );
-    }
+  // Error display
+  if (error) {
+      return (
+          <div style={styles.historyPanel}>
+              <h2 style={styles.title}>History</h2>
+              <p style={styles.noHistoryText}>{error}</p>
+          </div>
+      );
+  }
 
     // Group history by topic
   const groupedHistory = history.reduce((acc, entry) => {
@@ -62,6 +45,7 @@ const History = () => {
     acc[topic].push({ date, input, output });
     return acc;
   }, {});
+
 
   return (
     <div style={styles.historyPanel}>
@@ -149,7 +133,5 @@ const styles = {
       marginTop: '20px',
     },
   };
-  
-
 
 export default History;

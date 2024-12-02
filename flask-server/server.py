@@ -1,5 +1,6 @@
+import time
 from datetime import datetime
-from flask import Flask, jsonify, request, send_from_directory
+from flask import Flask, jsonify, request, send_from_directory, Response
 from flask_cors import CORS
 from basic_math import BasicMath
 from advanced_math import AdvancedMath
@@ -18,17 +19,20 @@ logging.basicConfig(level=logging.DEBUG)
 # math bank controller
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}}) 
+CORS(app, supports_credentials=True, resources={r"/*": {"origins": "http://localhost:3000"}}) 
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 
 db.init_app(app)
+
+history = HistorySection(user="Guest") # global var
 
 def create_tables():
     db.create_all()
 
 @app.route('/logInReq', methods = ['POST'])
 def logInReq():
+    global history
     try:
         data = request.get_json()
         print(f"recieved data: {data}")
@@ -40,6 +44,7 @@ def logInReq():
         # print("user password = ", user.password) #actual password behind the username
 
         if user and (user.password == testPassword):
+             history = HistorySection(user=user)
              return jsonify({'Log In Successful' : True}), 200
         else:
              return jsonify({'Username or Password invalid' : False}), 200
@@ -103,34 +108,39 @@ basic_math = BasicMath()
 advanced_math = AdvancedMath()
 equation_solver = EquationSolver()
 graph = Graph()
-history = HistorySection(user="user"); # for one user
+
+
 
 
 @app.route('/history', methods=['GET'])
 def get_history():
     try:
-        # Log the request to the console
         app.logger.info("Fetching history")
         
         history_entries = history.get_all_hist()  # Retrieve history entries
-        
+        if not history_entries:
+            return jsonify({'history': []}), 200  # Return an empty list if no history
+
         app.logger.info(f"Retrieved {len(history_entries)} entries")
         
         # Format the history data to send to the client
-        history_data = []
-        for entry in history_entries:
-            history_data.append({
-                'input': entry['input'],
-                'output': entry['output'],
-                'topic': entry['topic'],
-                'date': entry['date']
-            })
+        history_data = [{'input': entry['input'], 'output': entry['output'], 'topic': entry['topic'], 'date': entry['date']} for entry in history_entries]
         
         return jsonify({'history': history_data}), 200
 
     except Exception as e:
         app.logger.error(f"Error: {e}")
         return jsonify({'error': str(e)}), 500
+
+
+def add_history_entry(input_expr, output, topic):
+    history.add_entry(input=input_expr, output=output, topic=topic)
+    return {
+        'input': input_expr,
+        'output': output,
+        'topic': topic,
+        'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    }
 
 
 
@@ -148,51 +158,26 @@ def calculate():
         if any(func in expression for func in ['sin', 'cos', 'tan', 'log', 'ln', 'sqrt', '^', '|', '!', 'π', 'e']):
             print("is going to advanced math")
             result = advanced_math.process(expression, isDegreeMode)
-            print("result is  {result}")
-
-            history.add_entry(input=expression, output=result, topic="Advanced Math")
-            print(f"DEBUG STMT: {expression} = {result} added to history")
-            print("\nCurrent history:")
-            history.print_all_hist()
-            return jsonify({'result': result, 'history_entry': {
-                'input': expression,
-                'output': result,
-                'topic': "Advanced Math",
-                'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            }})
+            history_entry = add_history_entry(expression, result, "Advanced Math")
         else:
             result = basic_math.process(expression)
-           
-            history.add_entry(input=expression, output=result, topic="Basic Math")
-            print(f"DEBUG STMT: {expression} = {result} added to history")
-            print("\nCurrent history:")
-            history.print_all_entries()
-
-            return jsonify({'result': result, 'history_entry': {
-                'input': expression,
-                'output': result,
-                'topic': "Basic Math",
-                'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            }})
+            history_entry = add_history_entry(expression, result, "Basic Math")
+    
+        
+        print(f"DEBUG STMT: {expression} = {result} added to history")
+        print("\nCurrent history:")
+        history.print_all_entries()
+    
+        return jsonify({'result': result, 'history_entry': history_entry})
         
     except ZeroDivisionError:
-        history.add_entry(input=expression, output='Cannot divide by zero', topic="Error")
+        history_entry = add_history_entry(expression, 'Cannot divide by zero', "Error")
         print(f"DEBUG STMT: {expression} = Error added to history")
-        return jsonify({'error': 'Cannot divide by zero', 'history_entry': {
-            'input': expression,
-            'output': 'Cannot divide by zero',
-            'topic': "Error",
-            'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        }}, 400)
+        return jsonify({'error': 'Cannot divide by zero', 'history_entry': history_entry}), 400
     except Exception as e:
-        history.add_entry(input=expression, output='Invalid expression', topic="Error")
+        history_entry = add_history_entry(expression, 'Invalid expression', "Error")
         print(f"DEBUG STMT: {expression} = Error added to history")
-        return jsonify({'error': 'Invalid expression', 'history_entry': {
-            'input': expression,
-            'output': 'Invalid expression',
-            'topic': "Error",
-            'date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        }}, 400)
+        return jsonify({'error': 'Invalid expression', 'history_entry': history_entry}), 400
 
     
 

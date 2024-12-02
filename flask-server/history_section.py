@@ -89,7 +89,6 @@ class HistorySection:
     
     # Print entire history.
     def print_all_entries(self):
-        """Prints all history entries using the print_entry method."""
         if not self.history:
             print("No history to display.")
             return
@@ -110,6 +109,8 @@ class HistorySection:
                   f"topic: {entry['topic']}, date: {entry['date']}, id: {entry['id']}]")
         else:
             print("Invalid entry format. Missing required keys.")
+
+       
     
     def has_history(self):
         return bool(self.history) and any(bool(entries) for entries in self.history.values())
