@@ -1,38 +1,69 @@
-// History.js
-import React from 'react';
+// Alex Bowman - AAB210003
+// History Frontend
+import React, { useEffect, useState } from 'react';
 
-const History = ({ history }) => {
-    return (
-        <div style={historyContainerStyle}>
-            <h2>History</h2>
-            {Object.keys(history).length === 0 ? (
-                <p>No history available.</p>
-            ) : (
-                Object.entries(history).map(([topic, dates]) =>
-                    Object.entries(dates).map(([date, entries], index) => (
-                        <div key={`${topic}-${date}-${index}`} style={dateContainerStyle}>
-                            {/* Render topic and date */}
-                            {index === 0 && <h3 style={headerStyle}>{`<${topic}> | ${formatDate(date)}`}</h3>}
-                            {Object.values(entries).map((entry, entryIndex) => (
-                                <div
-                                    key={entry.id}
-                                    style={{
-                                        ...entryStyle,
-                                        marginLeft: entryIndex === 0 ? '0' : '1rem', // Apply indentation dynamically
-                                    }}
-                                >
-                                    <p>{`${entry.input} = ${entry.output}`}</p>
-                                </div>
-                            ))}
-                        </div>
-                    ))
-                )
-            )}
+const History = ({refresh}) => {
+  const [history, setHistory] = useState([]);
+
+  const fetchHistory = async () => {
+      try {
+          const response = await fetch('http://127.0.0.1:5000/history');
+          if (response.ok) {
+              const data = await response.json();
+              setHistory(data.history || []); // Update state with fetched history
+          } else {
+              console.error("Failed to fetch history:", response.statusText);
+          }
+      } catch (error) {
+          console.error("Error fetching history:", error);
+      }
+  };
+
+  useEffect(() => {
+      fetchHistory(); // Fetch history on component mount
+  }, [refresh]); 
+
+  /* Error display
+  //if (error) {
+      return (
+          <div style={styles.historyPanel}>
+              <h2 style={styles.title}>History</h2>
+              <p style={styles.noHistoryText}>{error}</p>
+          </div>
+      );
+  }*/
+
+    // Group history by topic
+  const groupedHistory = history.reduce((acc, entry) => {
+    const { topic, date, input, output } = entry;
+    if (!acc[topic]) {
+      acc[topic] = [];
+    }
+    acc[topic].push({ date, input, output });
+    return acc;
+  }, {});
+
+
+  return (
+    <div style={styles.historyPanel}>
+      <div style={styles.title}>History</div>
+      {Object.keys(groupedHistory).map((topic) => (
+        <div key={topic}>
+          <div style={styles.topicHeader}>
+            {topic} | {formatDate(groupedHistory[topic][0].date)}  {/* Formatted date */}
+          </div>
+          {groupedHistory[topic].map((entry, index) => (
+            <div key={index} style={styles.entry}>
+              <span style={styles.inputOutput}>{entry.input} = {entry.output}</span>
+            </div>
+          ))}
         </div>
-    );
+      ))}
+    </div>
+  );
 };
 
-// Helper function to format the date
+// Function that formats the date string.
 const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -42,32 +73,62 @@ const formatDate = (dateString) => {
     });
 };
 
-const historyContainerStyle = {
-    position: 'absolute',
-    right: '0%', // Align the container to the right side with some margin
-    top: '60%', // Center it vertically
-    transform: 'translateY(-50%)', // Adjust for proper vertical alignment
-    backgroundColor: 'white',
-    borderColor: 'white',
-    height: '82vh', // Match calculator container height
-    width: '24vw', // Match calculator container width
-    alignContent: 'center',
-    alignItems: 'center',
-    padding: '3vh', // Match calculator container padding
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)', // Match calculator box shadow
-    overflowY: 'scroll', // Allow scrolling for history entries
-};
-
-const dateContainerStyle = {
-    marginBottom: '1rem',
-};
-
-const headerStyle = {
-    marginBottom: '0.5rem',
-};
-
-const entryStyle = {
-    marginBottom: '0.5rem',
-};
+const styles = {
+    historyPanel: {
+      position: 'absolute',
+      top: '60%',
+      right: '5px',
+      transform: 'translateY(-50%)',
+      backgroundColor: 'white',
+      border: '1px solid lightgray',
+      height: '82vh',
+      width: '22vw',
+      padding: '3vh',
+      boxShadow: '0 4px 8px rgba(0, 0, 0, 0.3)',
+      overflowY: 'scroll',
+      zIndex: 9999,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'flex-start',
+      borderRadius: '8px',
+    },
+    title: {
+      fontWeight: 'bold',
+      marginBottom: '1rem',
+      fontSize: '18px',
+      color: 'black',
+      textAlign: 'center',
+      width: '100%',
+      fontFamily: '"Arial", sans-serif',
+    },
+    topicHeader: {
+      marginBottom: '0.5rem',
+      fontSize: '16px',
+      color: '#333',
+      fontWeight: 'bold',
+      textTransform: 'capitalize',  // Capitalize the topic name
+      display: 'flex',
+      justifyContent: 'space-between',
+      width: '100%',
+      fontFamily: '"Arial", sans-serif',
+    },
+    entry: {
+      marginBottom: '0.5rem',
+      display: 'flex',
+      flexDirection: 'column', // Align input/output vertically
+      width: '100%',  // Ensure the entry takes up full width
+      fontFamily: '"Arial", sans-serif',
+    },
+    inputOutput: {
+      //fontWeight: 'bold',
+      marginLeft: '20px',
+    },
+    noHistoryText: {
+      fontSize: '18px',
+      color: 'gray',
+      textAlign: 'center',
+      marginTop: '20px',
+    },
+  };
 
 export default History;

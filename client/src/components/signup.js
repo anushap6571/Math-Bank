@@ -43,7 +43,7 @@ const SignUpPage=({setIsLoggedIn, setUsername})=>{
             })
             .catch((error) =>{
                 console.log('Error from catch \n', error);
-                alert('This Username already exists in Math Bank')
+                alert('This Username or Email already exists in Math Bank')
             })
            
             reset()
@@ -97,6 +97,10 @@ const SignUpPage=({setIsLoggedIn, setUsername})=>{
                             type="text"
                             placeholder="Enter your Email"
                             {...register("email", { required: true, maxLength: 30 })}
+                            {...register("email", 
+                                {required:true, maxLength:30,
+                                    pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/    
+                                })}
                             style={inputStyle}
                         />
                         {errors.email && (
@@ -107,6 +111,10 @@ const SignUpPage=({setIsLoggedIn, setUsername})=>{
                                 Max email length is 30 characters
                             </span>
                         )}
+                        {errors.email?.type === "pattern" && 
+                        <span style={errorStyle}>
+                            Invalid email format
+                        </span>}
                     </Form.Group>
 
                     {/* Password Field */}

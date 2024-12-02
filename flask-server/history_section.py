@@ -1,12 +1,6 @@
 # History Section Class
 # Written by Alex Bowman
 
-##### Assumptions #####
-# The attributes input, output and topic have been created with the 
-# assumption that the 'computation' class will have made these 
-# differentiations, especially with regard to topic, before using any 
-# methods in this class.
-
 ### Notes ###
     # del_all_hist is a method that should only be called if a user has decided
 # decided to deactivate their account, because it will delete all their history. 
@@ -83,7 +77,40 @@ class HistorySection:
                     return entries[entry_id] # entry found
         return None # entry not found
 
-
-    # Retrieve all user history. 
+    # This will flatten the history and return a list of all entries
     def get_all_hist(self):
-        return self.history
+        hist = []
+    
+        for topic, dates in self.history.items():
+            for date, entries in dates.items():
+                for entry_id, entry in entries.items():
+                    hist.append(entry)  # Append the entry to the list
+        return hist
+    
+    # Print entire history.
+    def print_all_entries(self):
+        if not self.history:
+            print("No history to display.")
+            return
+
+        for topic, dates in self.history.items():
+            for date, entries in dates.items():
+                for entry_id, entry in entries.items():
+                    self.print_entry(entry)
+    
+    # Print an entry.
+    def print_entry(self, entry):
+        if not isinstance(entry, dict):
+            print("Invalid entry format. Expected a dictionary.")
+            return
+        keys = ['input', 'output', 'topic', 'date', 'id']
+        if all(key in entry for key in keys):
+            print(f"[input: {entry['input']}, output: {entry['output']}, "
+                  f"topic: {entry['topic']}, date: {entry['date']}, id: {entry['id']}]")
+        else:
+            print("Invalid entry format. Missing required keys.")
+
+       
+    
+    def has_history(self):
+        return bool(self.history) and any(bool(entries) for entries in self.history.values())

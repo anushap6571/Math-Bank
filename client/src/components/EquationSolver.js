@@ -1,16 +1,38 @@
 
 // Anusha Patel - use case display equation solver interface
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Graph from './graph'
 import Notes from './notes'
+import History from './history';
 
 const EquationSolver = ({ equation, setEquation }) => {
     const [solutions, setSolutions] = useState(null);
     const [error, setError] = useState('');
+    const [history, setHistory] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     const handleInputChange = (e) => {
         setEquation(e.target.value);
+    };
+
+    const updateHistory = async (expression, result, error = '') => {
+        try {
+            const newEntry = { expression, result: result || error, date: new Date().toLocaleString() };
+            setHistory((prevHistory) => [newEntry, ...prevHistory]); // Update locally
+
+            // Trigger a refresh
+            setRefresh((prev) => !prev);
+
+            // Fetch history from the server
+            const response = await fetch('http://127.0.0.1:5000/history', { method: 'GET' });
+            if (response.ok) {
+                const data = await response.json();
+                setHistory(data.history || []); // Sync with the server
+            }
+        } catch (err) {
+            console.error("Error updating history:", err);
+        }
     };
 
     const solveEquation = async () => {
@@ -28,13 +50,19 @@ const EquationSolver = ({ equation, setEquation }) => {
             if (response.ok) {
                 setSolutions(data.solutions); // Ensure the backend returns a `solutions` array
                 setError('');
+
+                await updateHistory();
             } else {
                 setError(data.error || 'Unknown error occurred.');
                 setSolutions(null);
+
+                await updateHistory();
             }
         } catch (err) {
             setError('Error communicating with server.');
             setSolutions(null);
+
+            await updateHistory();
         }
     };
 
@@ -70,7 +98,10 @@ const EquationSolver = ({ equation, setEquation }) => {
                     {error && <p style={styles.error}>{error}</p>}
                 </div>
                 <Graph equation={equation} setEquation={setEquation} />
-
+                <div style={{ marginTop: '20px' }}>
+                <h2>Calculation History</h2>
+                <History refresh={refresh} />
+                </div>
             </div>
 
         </div>

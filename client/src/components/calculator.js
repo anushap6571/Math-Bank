@@ -13,7 +13,8 @@ const Calculator = () => {
     const [isHovering, setHoveredButton] = useState(null);
     const navigate = useNavigate();
     const [isDegreeMode, setIsDegreeMode] = useState(false); // Track mode (Degree/Radian)
-    const [history, setHistory] = useState({});
+    const [history, setHistory] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
@@ -131,6 +132,29 @@ const Calculator = () => {
 
     };
 
+    
+
+    const updateHistory = async (expression, result, error = '') => {
+        try {
+            const newEntry = { expression, result: result || error, date: new Date().toLocaleString() };
+            setHistory((prevHistory) => [newEntry, ...prevHistory]); // Update locally
+
+            // Trigger a refresh
+            setRefresh((prev) => !prev);
+
+            // Fetch history from the server
+            const response = await fetch('http://127.0.0.1:5000/history', { method: 'GET' });
+            if (response.ok) {
+                const data = await response.json();
+                setHistory(data.history || []); // Sync with the server
+            }
+        } catch (err) {
+            console.error("Error updating history:", err);
+        }
+    };
+
+    
+    
 
     const calculate = async () => {
         try {
@@ -144,39 +168,26 @@ const Calculator = () => {
             });
 
             const data = await response.json();
-            if (response.ok) {
+            if (response.ok && data.result) {
                 const result = data.result;
                 setResult(result);
-                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ' : prev + '= ') + result + '\n');
-
-                const topic = 'topic';
-                const date = new Date().toLocaleString();
-                const entry = {
-                    id: Date.now().toString(),
-                    input: expression,
-                    output: result,
-                    topic,
-                    date,
-                };
-                setHistory((prev) => {
-                    const newHistory = { ...prev };
-                    if (!newHistory[topic]) newHistory[topic] = {};
-                    if (!newHistory[topic][date]) newHistory[topic][date] = {};
-                    newHistory[topic][date][entry.id] = entry;
-                    return newHistory;
-                });
-
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + result + '\n'); 
                 setExpression('');  // clear math expression after calculation
                 setError('');
+
+                await updateHistory();
             } else {
                 setError(data.error);
-                setTextbox((prev) => (prev + '\n' + data.error + '\n'));
+                setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + data.error + '\n'); 
                 setResult(null);
 
+                await updateHistory();
             }
         } catch (err) {
             setError('Error communicating with server.');
             setResult(null);
+            
+            await updateHistory();
         }
     };
 
@@ -260,7 +271,7 @@ const Calculator = () => {
                 </div>
             </div>
             <Notes />
-            <History history={history} />
+            <History refresh={refresh} /> 
         </div>
 
     );
