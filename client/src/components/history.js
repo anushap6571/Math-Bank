@@ -2,39 +2,36 @@
 // History Frontend
 import React, { useEffect, useState } from 'react';
 
-const History = () => {
-  const [history, setHistory] = useState([]); // Ensure it's an array
-  const [error, setError] = useState(null);
+const History = ({refresh}) => {
+  const [history, setHistory] = useState([]);
+
+  const fetchHistory = async () => {
+      try {
+          const response = await fetch('http://127.0.0.1:5000/history');
+          if (response.ok) {
+              const data = await response.json();
+              setHistory(data.history || []); // Update state with fetched history
+          } else {
+              console.error("Failed to fetch history:", response.statusText);
+          }
+      } catch (error) {
+          console.error("Error fetching history:", error);
+      }
+  };
 
   useEffect(() => {
-      async function fetchHistory() {
-          try {
-              const response = await fetch('http://localhost:5000/history');
-              if (response.ok) {
-                  const data = await response.json();
-                  console.log("Fetched history:", data);
-                  const historyData = Array.isArray(data.history) ? data.history : [];
-                  setHistory(historyData);
-              } else {
-                  setError('Failed to fetch history');
-              }
-          } catch (err) {
-            console.error("Error fetching history:", err); // Log error
-            setError(err.message || 'Unknown error');
-          }
-      }
-      fetchHistory();
-  }, []); 
+      fetchHistory(); // Fetch history on component mount
+  }, [refresh]); 
 
-  // Error display
-  if (error) {
+  /* Error display
+  //if (error) {
       return (
           <div style={styles.historyPanel}>
               <h2 style={styles.title}>History</h2>
               <p style={styles.noHistoryText}>{error}</p>
           </div>
       );
-  }
+  }*/
 
     // Group history by topic
   const groupedHistory = history.reduce((acc, entry) => {

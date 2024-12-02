@@ -14,6 +14,7 @@ const Calculator = () => {
     const navigate = useNavigate();
     const [isDegreeMode, setIsDegreeMode] = useState(false); // Track mode (Degree/Radian)
     const [history, setHistory] = useState([]);
+    const [refresh, setRefresh] = useState(false);
 
     // funtion for button clicks to output to screen and save to expression
     const handleButtonClick = (value) => {
@@ -131,35 +132,27 @@ const Calculator = () => {
 
     };
 
+    
+
     const updateHistory = async (expression, result, error = '') => {
         try {
-            // Add the new entry to the local state first
-            const newEntry = { 
-                expression, 
-                result: result || error, 
-                date: new Date().toLocaleString(),
-            };
-            setHistory((prevHistory) => [newEntry, ...prevHistory]);
-    
-            // Fetch the latest history from the server
-            const response = await fetch('http://127.0.0.1:5000/history', {
-                method: 'GET',
-            });
-    
+            const newEntry = { expression, result: result || error, date: new Date().toLocaleString() };
+            setHistory((prevHistory) => [newEntry, ...prevHistory]); // Update locally
+
+            // Trigger a refresh
+            setRefresh((prev) => !prev);
+
+            // Fetch history from the server
+            const response = await fetch('http://127.0.0.1:5000/history', { method: 'GET' });
             if (response.ok) {
                 const data = await response.json();
-                if (data.history) {
-                    setHistory(data.history); // Update the history state with server data
-                } else {
-                    console.error("Failed to fetch history: No history in response");
-                }
-            } else {
-                console.error("Failed to fetch history:", response.statusText);
+                setHistory(data.history || []); // Sync with the server
             }
         } catch (err) {
-            console.error("Error fetching history:", err);
+            console.error("Error updating history:", err);
         }
     };
+
     
     
 
@@ -182,18 +175,19 @@ const Calculator = () => {
                 setExpression('');  // clear math expression after calculation
                 setError('');
 
-                await updateHistory(expression, result);
+                await updateHistory();
             } else {
                 setError(data.error);
                 setTextbox((prev) => (prev.endsWith('=') ? prev + ' ': prev + '= ') + data.error + '\n'); 
                 setResult(null);
 
-                await updateHistory(expression, null, data.error);
+                await updateHistory();
             }
         } catch (err) {
             setError('Error communicating with server.');
             setResult(null);
-            await updateHistory(expression, null, 'Error communicating with server.');
+            
+            await updateHistory();
         }
     };
 
@@ -277,7 +271,7 @@ const Calculator = () => {
                 </div>
             </div>
             <Notes />
-            <History history={history} /> 
+            <History refresh={refresh} /> 
         </div>
 
     );
