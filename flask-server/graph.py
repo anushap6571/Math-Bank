@@ -4,7 +4,7 @@ import os
 from sympy import symbols
 from sympy.parsing.sympy_parser import parse_expr
 import re
-
+from datetime import datetime 
 # Anusha Patel- graphing feautures 
 class Graph:
     
@@ -42,11 +42,15 @@ class Graph:
         )
 
         # Ensure the 'assets' directory exists
+
         assets_dir = 'assets'
-        graph_path = os.path.join(assets_dir, 'graph.html')
         try:
             if not os.path.exists(assets_dir):
                 os.makedirs(assets_dir)  # Create the directory if it doesn't exist
+            
+            # Generate a unique filename using a timestamp
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            graph_path = os.path.join(assets_dir, f'graph_{timestamp}.html')
             
             # Save the figure as HTML
             fig.write_html(graph_path)
@@ -54,7 +58,6 @@ class Graph:
         except Exception as e:
             print(f"Error creating or writing to directory: {e}")
             return {"error": "Unable to save graph. Check directory permissions."}
-        # Save the figure as HTML
         
         fig.write_html(graph_path)
 
